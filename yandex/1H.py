@@ -3,22 +3,31 @@ def foo(arr):
     x1, v1 = arr[1], arr[2]
     x2, v2 = arr[3], arr[4]
 
+    if v1 == 0 and v2 == 0:
+        if x1 == L - x2:
+            print('YES')
+            print(0)
+            return
+        else:
+            print('NO')
+            return
+
+
     x_zero, v_zero = 0, v2
-    x_rel, v_rel = x1 - x2, v1 - v2
-    # x_fake, v_fake = L - x1, -v1
-    # x_fake_rel, v_fake_rel = x_fake, v_fake - v2
-
-    # if v_fake_rel == 0:
-    #     print('NO')
-    #     return
-
-    # delta = x_zero - x_fake_rel
-    # t = delta / v_fake_rel
-
+    # temp = x1 - x2
+    # temp1 = temp - (x1 - x2) % L
+    x_rel, v_rel = (x1 - x2) % L, v1 - v2
+    diff = -x2
     delta = x_rel
-    # if v_rel < 0:
-    #     delta = delta - L
-    t = delta / v_rel
+
+    t = 0
+    if v_rel == 0:
+        x_fake = delta / 2
+        t1 = abs((x_fake + diff) / v_zero)
+        t2 = abs(x_fake / v_zero)
+        t = min(t1, t2)
+    else:
+        t = abs(delta / v_rel)
 
     print('YES')
     print(t)
@@ -29,5 +38,5 @@ f = open('input.txt', 'r')
 arr = []
 for line in f:
     arr = list(map(int, line.split()))
-print(arr)
+# print(arr)
 foo(arr)
