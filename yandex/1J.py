@@ -47,10 +47,14 @@ for line in lines:
 print(doc)
 
 this_x, this_y = 0, 0 # коретка
+h = 0
+
+surr = [0, W]
 
 res = []
 
 for obj in doc:
+
     if obj['type'] == 'w':
         size = C * len(obj['data'])
         was_inserted = False
@@ -67,7 +71,10 @@ for obj in doc:
                 was_inserted = True
             else:
                 this_x = 0
-                this_y += H
+                this_y += max(H, h)
+                if h != 0:
+                    h = 0
+
     if obj['type'] == 'i':
         if obj['layout'] == 'embedded':
             size = obj['width']
@@ -85,7 +92,23 @@ for obj in doc:
                     was_inserted = True
                 else:
                     this_x = 0
-                    this_y += max(obj['height'], H)
+                    this_y += max(H, h)
+                    # this_y += max(obj['height'], H)
+            h = obj['height']
+            res.append([this_x, this_y])
+
+        if obj['layout'] == 'surrounded':
+            this_size = obj['width']
+            was_inserted = False
+            while not was_inserted:
+
+                if this_x + this_size <= W:
+                    this_x += this_size
+                    was_inserted = True
+                else:
+                    this_x = 0
+                    this_y += max(H, h)
+
             res.append([this_x, this_y])
 
 print(res)
