@@ -69,6 +69,44 @@ def find_place(this_x, this_y, size, h):
         else:
             if i_min + 1 != len(insert_arr) - 1:
                 i_min += 2
+                was_inserted = False
+            else:
+                this_x = 0
+                this_y += max(H, h)
+                if h != 0:
+                    h = 0
+
+                list_to_remove = []
+                for l in range(len(insert_arr)):
+                    hh = insert_arr[l][1]
+                    if hh < this_y:
+                        list_to_remove.append(insert_arr[l])
+
+                while len(list_to_remove) > 0:
+                    el = list_to_remove.pop()
+                    insert_arr.remove(el)
+
+                insert_arr.sort(key=lambda x: x[0])
+                i_min = 0
+
+    return this_x, this_y, h
+
+def find_place_surr(this_x, this_y, size, h):
+    was_inserted = False
+    i_min = 0
+    while not was_inserted:
+        x_min, x_max = insert_arr[i_min][0], insert_arr[i_min + 1][0]
+
+        this_size = size
+
+        x_first = this_x
+        x_second = this_x + this_size
+        if x_first >= x_min and x_second <= x_max:
+            this_x += this_size
+            was_inserted = True
+        else:
+            if i_min + 1 != len(insert_arr) - 1:
+                i_min += 2
             else:
 
                 this_x = 0
@@ -89,7 +127,45 @@ def find_place(this_x, this_y, size, h):
                 insert_arr.sort(key=lambda x: x[0])
                 i_min = 0
 
-        return this_x, this_y, h
+    return this_x, this_y, h
+
+def find_place_surr(this_x, this_y, size, h):
+    was_inserted = False
+    i_min = 0
+    while not was_inserted:
+        x_min, x_max = insert_arr[i_min][0], insert_arr[i_min + 1][0]
+
+        this_size = size
+
+        x_first = this_x
+        x_second = this_x + this_size
+        if x_first >= x_min and x_second <= x_max:
+            this_x += this_size
+            was_inserted = True
+        else:
+            if i_min + 1 != len(insert_arr) - 1:
+                i_min += 2
+            else:
+
+                this_x = 0
+                this_y += max(H, h)
+                if h != 0:
+                    h = 0
+
+                list_to_remove = []
+                for l in range(len(insert_arr)):
+                    hh = insert_arr[l][1]
+                    if hh < this_y:
+                        list_to_remove.append(insert_arr[l])
+
+                while len(list_to_remove) > 0:
+                    el = list_to_remove.pop()
+                    insert_arr.remove(el)
+
+                insert_arr.sort(key=lambda x: x[0])
+                i_min = 0
+
+    return this_x, this_y, h
 
 for obj in doc:
 
@@ -107,13 +183,16 @@ for obj in doc:
 
         if obj['layout'] == 'surrounded':
             this_size = obj['width']
-            this_x, this_y, h = find_place(this_x, this_y, size, h)
+            this_x, this_y, h = find_place_surr(this_x, this_y, this_size, h)
 
             insert_arr.append([this_x - this_size, this_y + obj['height']])
             insert_arr.append([this_x, this_y + obj['height']])
             insert_arr.sort(key=lambda x: x[0])
-            res.append([this_x, this_y])
+            print([this_x - this_size, this_y])
+            res.append([this_x - this_size, this_y])
         if obj['layout'] == 'floating':
+
+
             dx = obj['dx']
             dy = obj['dy']
             width = obj['width']
@@ -130,7 +209,8 @@ for obj in doc:
             res.append([coord_x_left, this_y + dy])
 
     if obj['type'] == 'new_line':
-        this_y += C
+        # this_y += C
+        pass
 
 print(res)
 
