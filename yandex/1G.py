@@ -57,7 +57,16 @@ def do_step(data):
             return [[x, y, p, c, True]]
         else:  # x < p
             if x > p - x:
-                c += 2
+                while x > 0 and p > 0:
+                    p -= x
+                    if p <= 0:
+                        c += 1
+                        break
+                    x -= p
+                    if x <= 0:
+                        c += 1
+                        break
+                    c += 1
                 return [[x, y, p, c, True]]
             else:  # x <= p - x
                 c = -1
@@ -121,7 +130,7 @@ for i in range(len(data_list)):
     x, y, p, c, done = data_list[i]
     if c != -1:
         c_min = min(c_min, c)
-print(data_list)
+# print(data_list)
 if c_min == 1000000:
     print(-1)
 else:
