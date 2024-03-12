@@ -10,9 +10,12 @@ delta_p = arr[2]  # кол-во производимых солдат
 p = 0
 
 y -= x
-if y != 0:
+if y > 0:
     p = delta_p
 c = 1
+
+if y < 0:
+    y = 0
 
 done = False
 data_list = [[x, y, p, c, done]]
@@ -24,7 +27,7 @@ def produce_soldiers(data):
         if p < 0:
             p = 0
         x -= p
-        if y != 0:
+        if y > 0:
             p += delta_p
         if x <= 0:
             done = True
@@ -67,12 +70,15 @@ def do_step(data):
                         c += 1
                         break
                     c += 1
-                return [[x, y, p, c, True]]
+                arr = check_win([x, y, p, c, done])
+                return [arr]
             else:  # x <= p - x
                 c = -1
                 return [[x, y, p, c, True]]
     else:  # y != 0
         if y > x:
+            if x <= p:
+                return [[0, 1, 1, -1, True]]
             y -= (x - p)
             p = 0
             arr = [x, y, p, c + 1, False]
@@ -107,14 +113,17 @@ def do_step(data):
             return [arr1, arr2]
 
 
+kk = 0
 while True:
     new_data_list = []
     while len(data_list) > 0:
         data = data_list.pop()
         datas = do_step(data)
         for d in datas:
-            new_data_list.append(d)
+            if d[3] != -1:
+                new_data_list.append(d)
     # data_list = [list(x) for x in set(tuple(x) for x in new_data_list)]
+    new_data_list.append([0, 1, 1, -1, True])
     data_list = new_data_list
 
     count_done = 0
@@ -123,6 +132,9 @@ while True:
             count_done += 1
     if count_done == len(data_list):
         break
+    kk += 1
+    # if kk % 100 == 0:
+    #     print(kk)
 
 
 c_min = 1000000
@@ -130,7 +142,7 @@ for i in range(len(data_list)):
     x, y, p, c, done = data_list[i]
     if c != -1:
         c_min = min(c_min, c)
-# print(data_list)
+print(data_list)
 if c_min == 1000000:
     print(-1)
 else:
