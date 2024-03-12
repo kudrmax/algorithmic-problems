@@ -124,7 +124,18 @@ while True:
                 new_data_list.append(d)
     # data_list = [list(x) for x in set(tuple(x) for x in new_data_list)]
     new_data_list.append([0, 1, 1, -1, True])
-    data_list = new_data_list
+
+    c_min_in_list = 10000000000000
+    for lst in new_data_list:
+        c = lst[3]
+        done = lst[4]
+        if done and c != -1 and c < c_min_in_list:
+            c_min_in_list = c
+    if c_min_in_list != 10000000000000:
+        data_list = [lst for lst in new_data_list if (lst[4] and (lst[3] == c_min_in_list or lst[3] == -1)) or not lst[4]]
+    else:
+        data_list = new_data_list
+    # print(data_list)
 
     count_done = 0
     for i in range(len(data_list)):
@@ -142,7 +153,7 @@ for i in range(len(data_list)):
     x, y, p, c, done = data_list[i]
     if c != -1:
         c_min = min(c_min, c)
-print(data_list)
+# print(data_list)
 if c_min == 1000000:
     print(-1)
 else:
