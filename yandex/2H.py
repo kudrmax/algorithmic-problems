@@ -5,8 +5,6 @@ for line in lines[1:]:
     arr.append(list(map(int, line.split(' '))))
 # print(arr)
 
-d = {}
-
 max_el = arr[0][0]
 max_index = [0, 0]
 for i in range(len(arr)):
@@ -16,56 +14,65 @@ for i in range(len(arr)):
             max_el = a
             max_index = [i, j]
 
-second_max_el = -1
-second_max_index = [0, 0]
-for j in range(len(arr[0])):  # прохожусь по строке
-    i = max_index[0]
-    a = arr[i][j]
-    if a >= second_max_el:
-        if [i, j] != max_index:
-            second_max_el = a
-            second_max_index = [i, j]
-for j in range(len(arr)):  # прохожусь по столбцу
-    i = max_index[1]
-    a = arr[i][j]
-    if a >= second_max_el:
-        if [i, j] != max_index:
-            second_max_el = a
-            second_max_index = [i, j]
+d_list = []
 
-if max_index[0] == second_max_index[0]:
-    d['row'] = max_index[0]
-else:
-    d['col'] = max_index[1]
+for k in range(2):
 
-third_max_index = [0, 0]
-third_max_el = -1
-for i in range(len(arr)):
-    for j in range(len(arr[0])):
-        a = arr[i][j]
-        if 'row' in d:
-            already_checked = i == d['row']
-        else:
-            already_checked = j == d['col']
-        if not already_checked:
-            if a > third_max_el:
-                third_max_el = a
-                third_max_index = [i, j]
+    d = {}
+    if k == 0:
+        d['row'] = max_index[0]
+    else:
+        d['col'] = max_index[1]
 
-if 'row' in d:
-    d['col'] = third_max_index[1]
-else:
-    d['row'] = third_max_index[0]
+    third_max_index = [0, 0]
+    third_max_el = -1
+    for i in range(len(arr)):
+        for j in range(len(arr[0])):
+            a = arr[i][j]
+            if 'row' in d:
+                already_checked = i == d['row']
+            else:
+                already_checked = j == d['col']
+            if not already_checked:
+                if a > third_max_el:
+                    third_max_el = a
+                    third_max_index = [i, j]
 
-row = d['row'] + 1
-col = d['col'] + 1
+    if 'row' in d:
+        d['col'] = third_max_index[1]
+    else:
+        d['row'] = third_max_index[0]
 
-print(f'{max_el = }')
-print(f'{max_index = }')
-print(f'{second_max_el = }')
-print(f'{second_max_index = }')
-print(d)
-print(f'{third_max_el = }')
-print(f'{third_max_index = }')
+    row = d['row'] + 1
+    col = d['col'] + 1
 
+    # print(f'{max_el = }')
+    # print(f'{max_index = }')
+    # print(f'{second_max_el = }')
+    # print(f'{second_max_index = }')
+    # print(d)
+    # print(f'{third_max_el = }')
+    # print(f'{third_max_index = }')
+    # print(f'{row} {col}')
+
+    d_list.append(d)
+
+# print(d_list)
+
+d_max = []
+max_el_list = []
+for d in d_list:
+    max_el = -1
+    for i in range(len(arr)):
+        for j in range(len(arr[0])):
+            already_checked = i == d['row'] or j == d['col']
+            if not already_checked:
+                max_el = max(max_el, arr[i][j])
+    max_el_list.append(max_el)
+# print(max_el_list)
+
+index = max_el_list.index(min(max_el_list))
+
+row = d_list[index]['row'] + 1
+col = d_list[index]['col'] + 1
 print(f'{row} {col}')
