@@ -9,23 +9,35 @@ for i in range(2, t * 2 + 1, 2):
     arr = list(map(int, lines[i].split(' ')))
     arr_list.append(arr)
 
-for arr in arr_list[:1]:
-    print(arr)
+for arr in arr_list:
+    # print(arr)
 
     segment_count = 0
-    cursor = 0
+    lengths = []
 
     i = 0
     while i < len(arr):
+
         a = arr[i]
-        for length in range(1, a + 1):
+
+        length = 1
+        max_length = a
+        while length < max_length + 1:
             index = i + length - 1
             if index >= len(arr):
                 break
-            if arr[index] >= length:
-                pass
-            else:
+
+            max_length = min(max_length, arr[index])
+
+            if arr[index] < length:
                 break
-        i += length
+            length += 1
+        i += length - 1
+        lengths.append(length - 1)
         segment_count += 1
+
     print(segment_count)
+    for l in lengths:
+        print(l, end=' ')
+    print()
+    # print(lengths)
