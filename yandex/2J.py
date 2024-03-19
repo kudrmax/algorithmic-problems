@@ -8,7 +8,6 @@ for line in lines[1:]:
     matrix.append(row)
 
 n, m = len(matrix), len(matrix[0])
-# print(n, m)
 
 for i in range(n):
     for j in range(m):
@@ -16,15 +15,6 @@ for i in range(n):
             matrix[i][j] = 1
         else:
             matrix[i][j] = 0
-
-# print(matrix)
-
-
-# 1. Найти три точки
-# 2. Найти все возможные прямоугольники по этим трем точкам
-# 3. Понять является ли оставшаяся фигура прямоугольником
-
-# dir = [[1, 0], [0, 1], [-1, 0], [0, -1]]
 
 
 def do_step(i, j, max_i, max_j):
@@ -62,8 +52,8 @@ def find_4_points(matrix, n, m):
     black4 = [black3[0], black1[1]]
     return black1, black2, black3, black4
 
-def foo(matrix, n, m):
 
+def foo(matrix, n, m):
     black1, black2, black3, black4 = find_4_points(matrix, n, m)
     # print(black1, black2, black3, black4)
 
@@ -90,22 +80,21 @@ def foo(matrix, n, m):
                 count_black += 1
     # print([min_i, min_j], [max_i, max_j])
     # print(f'{count_black = }')
-
-    delta_i = max_i - min_i + 1
-    delta_j = max_j - min_j + 1
+    if count_black == 0:
+        return True
+    delta_i = (max_i - min_i) + 1
+    delta_j = (max_j - min_j) + 1
     count_black_in_theory = delta_i * delta_j
 
     # print(f'{count_black_in_theory = }')
     return count_black == count_black_in_theory
 
+
 flag1 = foo(matrix, n, m)
-# print()
-matrix_T  = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
-# print(matrix_T)
-# print(foo(matrix_T, m, n))
+matrix_T = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
 flag2 = foo(matrix_T, m, n)
 
 if flag1 or flag2:
-    print(True)
+    print('YES')
 else:
-    print(False)
+    print('NO')
