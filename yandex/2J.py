@@ -56,13 +56,27 @@ def find_4_points(matrix, n, m):
     black4 = [black3[0], black1[1]]
     return black1, black2, black3, black4
 
+def calc_area(matrix, black1, black2, black3, black4):
+    count_black = 0
+    for i in range(black1[0], black4[0] + 1):
+        for j in range(black1[1], black2[1] + 1):
+            if matrix[i][j] == 1:
+                count_black += 1
+    delta_i = abs((black1[0] - black4[0])) + 1
+    delta_j = abs((black1[1] - black2[1])) + 1
+    count_black_in_theory = delta_i * delta_j
+    return count_black == count_black_in_theory
+
 
 from copy import deepcopy
 
 
 def foo(matrix, n, m):
     black1, black2, black3, black4 = find_4_points(matrix, n, m)
-    print(black1, black2, black3, black4)
+    # print(black1, black2, black3, black4)
+
+    if not calc_area(matrix, black1, black2, black3, black4):
+        return False, []
 
     matrix_new = deepcopy(matrix)
 
