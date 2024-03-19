@@ -8,7 +8,7 @@ for line in lines[1:]:
     matrix.append(row)
 
 n, m = len(matrix), len(matrix[0])
-print(n, m)
+# print(n, m)
 
 for i in range(n):
     for j in range(m):
@@ -17,7 +17,7 @@ for i in range(n):
         else:
             matrix[i][j] = 0
 
-print(matrix)
+# print(matrix)
 
 
 # 1. Найти три точки
@@ -37,7 +37,7 @@ def do_step(i, j, max_i, max_j):
     return i, j, True
 
 
-def find_4_points(matrix):
+def find_4_points(matrix, n, m):
     black1 = [0, 0]
     i, j = 0, 0
     while True:
@@ -62,35 +62,50 @@ def find_4_points(matrix):
     black4 = [black3[0], black1[1]]
     return black1, black2, black3, black4
 
-black1, black2, black3, black4 = find_4_points(matrix)
-print(black1, black2, black3, black4)
+def foo(matrix, n, m):
 
-matrix_new = matrix.copy()
+    black1, black2, black3, black4 = find_4_points(matrix, n, m)
+    # print(black1, black2, black3, black4)
 
-print(black1[0], black4[0] + 1)
-print(black1[1], black2[1] + 1)
-for i in range(black1[0], black4[0] + 1):
-    for j in range(black1[1], black2[1] + 1):
-        matrix_new[i][j] = 0
-print(matrix_new)
+    matrix_new = matrix.copy()
 
-min_i, max_i = 100000, -1
-min_j, max_j = 100000, -1
+    # print(black1[0], black4[0] + 1)
+    # print(black1[1], black2[1] + 1)
+    for i in range(black1[0], black4[0] + 1):
+        for j in range(black1[1], black2[1] + 1):
+            matrix_new[i][j] = 0
+    # print(matrix_new)
 
-count_black = 0
-for i in range(n):
-    for j in range(m):
-        if matrix_new[i][j] == 1:
-            min_i = min(min_i, i)
-            min_j = min(min_j, j)
-            max_i = max(max_i, i)
-            max_j = max(max_j, j)
-            count_black += 1
-print([min_i, min_j], [max_i, max_j])
-print(f'{count_black = }')
+    min_i, max_i = 100000, -1
+    min_j, max_j = 100000, -1
 
-delta_i = max_i - min_i + 1
-delta_j = max_j - min_j + 1
-count_black_in_theory = delta_i * delta_j
+    count_black = 0
+    for i in range(n):
+        for j in range(m):
+            if matrix_new[i][j] == 1:
+                min_i = min(min_i, i)
+                min_j = min(min_j, j)
+                max_i = max(max_i, i)
+                max_j = max(max_j, j)
+                count_black += 1
+    # print([min_i, min_j], [max_i, max_j])
+    # print(f'{count_black = }')
 
-print(f'{count_black_in_theory = }')
+    delta_i = max_i - min_i + 1
+    delta_j = max_j - min_j + 1
+    count_black_in_theory = delta_i * delta_j
+
+    # print(f'{count_black_in_theory = }')
+    return count_black == count_black_in_theory
+
+flag1 = foo(matrix, n, m)
+# print()
+matrix_T  = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
+# print(matrix_T)
+# print(foo(matrix_T, m, n))
+flag2 = foo(matrix_T, m, n)
+
+if flag1 or flag2:
+    print(True)
+else:
+    print(False)
