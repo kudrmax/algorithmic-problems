@@ -47,6 +47,10 @@ def find_4_points(matrix, n, m):
     i, j = black2
     while i < n and matrix[i][j] == 1:
         i += 1
+        if j + 1 < m and i < n:
+            if matrix[i][j + 1] == 1:
+                # i += 1
+                break
     black3 = [i - 1, j]
 
     black4 = [black3[0], black1[1]]
@@ -58,7 +62,7 @@ from copy import deepcopy
 
 def foo(matrix, n, m):
     black1, black2, black3, black4 = find_4_points(matrix, n, m)
-    # print(black1, black2, black3, black4)
+    print(black1, black2, black3, black4)
 
     matrix_new = deepcopy(matrix)
 
