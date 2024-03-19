@@ -6,7 +6,11 @@ for line in lines[1:]:
 N = len(arr)
 for i in range(len(arr)):
     arr[i] = [arr[i][0] - 1, arr[i][1] - 1]
-# print(arr, N)
+
+arr_set = set()
+for i, j in arr:
+    arr_set.add((i, j))
+arr = arr_set
 
 def move_sursor(i, j, zero_j, max_i, max_j):
     if j <= zero_j:
@@ -24,25 +28,18 @@ def move_sursor(i, j, zero_j, max_i, max_j):
 
 
 def calc_dist(cursor_i, cursor_j, i, j):
-    delta_i = cursor_i - i
-    delta_j = cursor_j - j
-    dist = abs(delta_i) + abs(delta_j)
-    return dist
+    return abs(cursor_i - i) + abs(cursor_j - j)
 
-col_list = [k for k in range(N)]
 
-# res_list = []
 min_res = 1000000000
-for col in col_list:
+for col in range(N):
     i, j = 0, col
     cursor_i = 0
     res = 0
     while True:
-        if [i, j] in arr:
-            dist = calc_dist(cursor_i, col, i ,j)
-            res += dist
+        if (i, j) in arr:
+            res += calc_dist(cursor_i, col, i, j)
             cursor_i += 1
-
         i, j, flag = move_sursor(i, j, col, N - 1, N - 1)
         if not flag:
             break
