@@ -1,6 +1,3 @@
-cursor_i, cursor_j = 0, 0
-
-
 def move_sursor(i, j, zero_j, max_i, max_j):
     if j <= zero_j:
         j -= 1
@@ -13,5 +10,12 @@ def move_sursor(i, j, zero_j, max_i, max_j):
         return -1, -1, False
     return i, j, True
 
+
 N = 5
-print(move_sursor(0, 4, 3, N - 1, N - 1))
+col = 3
+i, j = 0, col
+while True:
+    i, j, flag = move_sursor(i, j, col, N - 1, N - 1)
+    if not flag:
+        break
+    # if [i, j] in 
