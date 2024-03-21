@@ -16,9 +16,9 @@ def foo():
 
     for i in range(min(n, k)):
         d[arr[i]] += 1
-    k += 1
+
     p1 = 0
-    p2 = min(n, k - 1)
+    p2 = min(n, k)
 
     while True:
         for i in range(p1, p2 + 1):
