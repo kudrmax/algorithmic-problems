@@ -9,24 +9,27 @@ def foo():
 
     # print(n, k, arr)
 
+    # if n == 1:
+    #     return 'NO'
+
     d = defaultdict(int)
 
-    if n == 1:
-        return 'NO'
-
-    for i in range(len(arr)):
-        a = arr[i]
+    for i in range(min(n, k)):
         d[arr[i]] += 1
-        if i - k - 1 >= 0:
-            d[arr[i - k - 1]] -= 1
-        # print(d)
-    # print(d)
+    k += 1
+    p1 = 0
+    p2 = min(n, k - 1)
 
-    print(d)
-
-    for key, val in d.items():
-        if val > 1:
-            return 'YES'
+    while True:
+        for i in range(p1, p2 + 1):
+            if d[arr[i]] > 1:
+                return 'YES'
+        d[arr[p1]] -= 1
+        p1 += 1
+        p2 += 1
+        if p2 >= len(arr):
+            break
+        d[arr[p2]] += 1
     return 'NO'
 
 print(foo())
