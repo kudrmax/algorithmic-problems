@@ -18,7 +18,51 @@ commands = []
 for command in lines:
     commands.append(command.strip())
 
+class Data():
+    def __init__(self):
+        self.team1 = ''
+        self.team2 = ''
+        self.score1 = 0
+        self.score2 = 0
+        self.scores1 = []
+        self.scores2 = []
+
+        self.score1_remain = 0
+        self.score2_remain = 0
+
+    def clear(self):
+        self.team1 = ''
+        self.team2 = ''
+        self.score1 = 0
+        self.score2 = 0
+        self.scores1.clear()
+        self.scores2.clear()
+
+data = Data()
+
 for command in commands:
+
+    match = match_score_pattern.match(command)
+    if match:
+        data.team1 = match.group(1)
+        data.team2 = match.group(2)
+        data.score1 = int(match.group(3))
+        data.score2 = int(match.group(4))
+        data.score1_remain = data.score1
+        data.score2_remain = data.score2
+        print(f"{data.team1} - {data.team2} {data.score1}:{data.score2}")
+
+    match = goal_pattern.match(command)
+    if match:
+        if data.score1_remain > 0:
+            data.scores1.append({
+                'name': match.group(1),
+                'score': int(match.group(2))
+            })
+            data.score1_remain -= 1
+        else:
+            pass
+        print(f"{match.group(1)} {match.group(2)}")
 
     match = total_goals_for_pattern.match(command)
     if match:
@@ -55,17 +99,3 @@ for command in commands:
     match = score_opens_by_player_pattern.match(command)
     if match:
         print(f"Score opens by {match.group(1)}")
-
-    # Дополнительные шаблоны
-    match = match_score_pattern.match(command)
-    if match:
-        team1 = match.group(1)
-        team2 = match.group(2)
-        score1 = match.group(3)
-        score2 = match.group(4)
-        print(f"{team1} - {team2} {score1}:{score2}")
-
-    match = goal_pattern.findall(command)
-    if match:
-        for player, minute in match:
-            print(f"{player} {minute}")
