@@ -7,7 +7,7 @@ def plot(A, B):
     for b in B:
         plt.plot(b[[0, 2]], b[[1, 3]], marker = 'o')
     for a in A:
-        plt.plot(a[[0, 2]], a[[1, 3]], marker = 'o')
+        plt.plot(a[[0, 2]], a[[1, 3]])
     plt.gca().set_aspect('equal')
     plt.show()
 
@@ -50,23 +50,19 @@ for line in lines[1 + N:]:
 
 max_count = 0
 for a in A:
-    # перенос фигуры B в точку с координатами ...
     ax1, ay1, ax2, ay2 = a
     pa = ax1, ay1
+    bx1, by1, bx2, by2 = B[0]
+    pb = bx1, by1
+
+    delta = pa[0] - pb[0], pa[1] - pb[1]
 
     count = 0
     for b in B:
-        bx1, by1, bx2, by2 = b
-        pb = bx1, by1
-
-        delta = pa[0] - pb[0], pa[1] - pb[1]
-
         new_b = bx1 + delta[0], by1 + delta[1], bx2 + delta[0], by2 + delta[1]
-        new_bx1, new_by1, new_bx2, new_by2 = new_b
-
         if new_b in A_set:
             count += 1
-    # print(f'{count = }')
+    print(f'{count = }, {delta = }')
     max_count = max(max_count, count)
 print(f'{max_count = }')
 print(len(A) - max_count)
