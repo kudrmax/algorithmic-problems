@@ -8,10 +8,16 @@ def foo():
     s = set(arr)
     # print(N, arr, s)
 
-    if N <= 1:
-        return 3
+    if N == 1:
+        p = arr[0]
+        point_coords = [
+            [p[0] + 1, p[1]],
+            [p[0], p[1] + 1],
+            [p[0] + 1, p[1] + 1]
+        ]
+        return 3, point_coords
 
-    res = 2
+    point_count = 2
 
     for i in range(len(arr)):
         for j in range(i + 1, len(arr)):
@@ -28,12 +34,15 @@ def foo():
                 return 0
 
             if b1 in s and b2 not in s:
-                res = 1
+                point_count = 1
 
             if b2 in s and b1 not in s:
-                res = 1
+                point_count = 1
 
             # print(a1, a2, b1, b2)
-    return res
+    return point_count, []
 
-print(foo())
+point_count, point_coords = foo()
+print(point_count)
+for p in point_coords:
+    print(*p, sep=' ')
