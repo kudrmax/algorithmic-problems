@@ -14,12 +14,14 @@ def find_two_points(a1, a2):
     b1_x, b1_y = (float(0.5 * ((x1 + x2) + (y2 - y1))), float(0.5 * ((y1 + y2) + (x1 - x2))))
     b2_x, b2_y = (float(0.5 * ((x1 + x2) - (y2 - y1))), float(0.5 * ((y1 + y2) - (x1 - x2))))
 
-    flag = True
-    for obj in [b1_x, b1_y, b2_x, b2_y]:
+    flag_b1 = True
+    for obj in [b1_x, b1_y]:
         if obj % 1 != 0:
-            flag = False
-
-    # print((b1_x, b1_y), (b2_x, b2_y), flag)
+            flag_b1 = False
+    flag_b2 = True
+    for obj in [b2_x, b2_y]:
+        if obj % 1 != 0:
+            flag_b2 = False
 
     b1_x = round(b1_x)
     b1_y = round(b1_y)
@@ -28,7 +30,7 @@ def find_two_points(a1, a2):
 
     b1, b2 = (b1_x, b1_y), (b2_x, b2_y)
 
-    return b1, b2, flag
+    return b1, b2, flag_b1, flag_b2
 
 
 def foo(N, arr):
@@ -45,23 +47,25 @@ def foo(N, arr):
         return 3, point_coords
 
     point_count = 2
-    b1, b2, flag = find_two_points(arr[0], arr[1])
+    b1, b2, flag_b1, flag_b2 = find_two_points(arr[0], arr[1])
     point_coords = [b1, b2]
 
     for i in range(len(arr)):
         for j in range(i + 1, len(arr)):
 
             a1, a2 = arr[i], arr[j]
-            b1, b2, flag = find_two_points(arr[i], arr[j])
+            b1, b2, flag_b1, flag_b2 = find_two_points(arr[i], arr[j])
 
-            if flag:
+            if flag_b1 and flag_b2:
                 if b1 in s and b2 in s:
                     return 0, []
 
+            if flag_b1:
                 if b1 in s and b2 not in s:
                     point_count = 1
                     point_coords = [b2]
 
+            if flag_b2:
                 if b2 in s and b1 not in s:
                     point_count = 1
                     point_coords = [b1]
