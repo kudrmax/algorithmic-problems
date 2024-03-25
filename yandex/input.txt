@@ -1,2 +1,4 @@
-aa bc aaa
-a aa aaa bcd abcd
+3
+0 2
+2 0
+2 2
