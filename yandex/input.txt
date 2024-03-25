@@ -1,11 +1,12 @@
-5
-0 0 1 2
-1 0 0 2
-2 0 2 2
-4 0 3 2
-4 0 5 2
-9 -1 10 1
-10 1 9 3
-8 1 10 1
-8 1 9 -1
-8 1 9 3
+"Juventus" - "Milan" 3:1
+Inzaghi 45'
+Del Piero 67'
+Del Piero 90'
+Shevchenko 34'
+Total goals for "Juventus"
+Total goals by Pagliuca
+Mean goals per game by Inzaghi
+"Juventus" - "Lazio" 0:0
+Mean goals per game by Inzaghi
+Mean goals per game by Shevchenko
+Score opens by Inzaghi

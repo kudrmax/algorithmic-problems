@@ -1,7 +1,6 @@
 # import matplotlib.pyplot as plt
 # import numpy as np
-
-
+import collections
 # def plot(A, B):
 #     A = np.array(A)
 #     B = np.array(B)
@@ -47,15 +46,15 @@ for line in lines[1 + N:]:
     B.append(a)
     B_set.add(a)
 
-delta_list = {}
-for a in A:
-    ax1, ay1, ax2, ay2 = a
-    pa = ax1, ay1
-    for b in B:
-        bx1, by1, bx2, by2 = b
-        pb = bx1, by1
-        delta = pa[0] - pb[0], pa[1] - pb[1]
-        delta_list[delta] = 0
+delta_list = collections.defaultdict(int)
+# for a in A:
+#     ax1, ay1, ax2, ay2 = a
+#     pa = ax1, ay1
+#     for b in B:
+#         bx1, by1, bx2, by2 = b
+#         pb = bx1, by1
+#         delta = pa[0] - pb[0], pa[1] - pb[1]
+#         delta_list[delta] = 0
 
 # print(delta_list)
 
@@ -68,24 +67,6 @@ for a in A:
             pb = bx1, by1
             delta = pa[0] - pb[0], pa[1] - pb[1]
             delta_list[delta] += 1
-# max_count = 0
-# for a in A:
-#     ax1, ay1, ax2, ay2 = a
-#     pa = ax1, ay1
-#     for b in B:
-#         bx1, by1, bx2, by2 = b
-#         pb = bx1, by1
-#         delta = pa[0] - pb[0], pa[1] - pb[1]
-#
-#         count = 0
-#         for bb in B:
-#             bx1, by1, bx2, by2 = bb
-#             new_b = bx1 + delta[0], by1 + delta[1], bx2 + delta[0], by2 + delta[1]
-#             if new_b in A_set:
-#                 count += 1
-#         # print(f'{count = }, {delta = }')
-#         max_count = max(max_count, count)
-# # print(f'{max_count = }')
 
 
 max_count = 0
