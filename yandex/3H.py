@@ -10,32 +10,41 @@ for line in lines[1:1 + N]:
 for line in lines[1 + N:]:
     B.append(list(map(int, line.split())))
 
-print(f'{N = }')
-print(f'{A = }')
-print(f'{B = }')
+# print(f'{N = }')
+# print(f'{A = }')
+# print(f'{B = }')
 
 A_set = collections.defaultdict(int)
 B_set = collections.defaultdict(int)
 
-def get_angle(s):
+
+def change_coords(s):
     x1, y1, x2, y2 = s
-    if x2 - x1 == 0:
-        return math.pi
-    return math.atan((y2 - y1) / (x2 - x1))
+    x, y = x2 - x1, y2 - y1
+    if x < 0:
+        x, y = -x, -y
+    return x, y
+
 
 for i in range(len(A)):
-    A_set[get_angle(A[i])] += 1
-    B_set[get_angle(B[i])] += 1
+    A_set[change_coords(A[i])] += 1
+    B_set[change_coords(B[i])] += 1
+
+max_count = 0
+for key_a, val_a in A_set.items():
+    val_b = B_set[key_a]
+    if val_b == val_a:
+        max_count = max(max_count, val_a)
+
+for key_a, val_a in B_set.items():
+    val_b = A_set[key_a]
+    if val_b == val_a:
+        max_count = max(max_count, val_a)
 
 print(A_set)
 print(B_set)
-
-count = 0
-for key_a, val_a in A_set.items():
-    val_b = B_set[key_a]
-    count += abs(val_b - val_a)
-
-print(count)
+print(max_count)
+print(len(A) - max_count)
 
 # print(A_set.symmetric_difference(B_set))
 
