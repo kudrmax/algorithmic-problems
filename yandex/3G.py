@@ -1,7 +1,3 @@
-def round_point(b):
-    return (round(b[0]), round(b[1]))
-
-
 def find_two_points(a1, a2):
     x1, y1 = a1
     x2, y2 = a2
@@ -41,16 +37,19 @@ def foo(N, arr):
 
             b1, b2, flag = find_two_points(arr[i], arr[j])
 
+            b1_flag = b1 in s
+            b2_flag = b2 in s
+
             if flag:
-                if b1 in s and b2 in s:
+                if b1_flag and b2_flag:
                     return 0, []
-                elif b1 in s and b2 not in s:
+                elif b1_flag and not b2_flag:
                     point_count = 1
                     point_coords = [b2]
-                elif b2 in s and b1 not in s:
+                elif not b1_flag and b2_flag:
                     point_count = 1
                     point_coords = [b1]
-                elif b1 not in s and b2 not in s:
+                else:
                     if point_count > 2:
                         point_count = 2
                         point_coords = [b1, b2]
