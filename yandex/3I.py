@@ -121,7 +121,17 @@ while len(commands) > 0:
 
     match = goals_on_minute_pattern.match(command)
     if match:
-        print(f"Goals on minute {match.group(1)} by {match.group(2)}")
+        time = int(match.group(1))
+        player_name = match.group(2)
+
+        scores = players[player_name]['scores'] if 'scores' in players[player_name] else []
+        scores_sum = 0
+        for score in scores:
+            print(score)
+            t = score['time']
+            if t == time:
+                scores_sum += 1
+        print(f"THIS: Goals on minute {time} by {player_name} ---> {scores_sum}")
 
     match = goals_on_first_t_minutes_pattern.match(command)
     if match:
