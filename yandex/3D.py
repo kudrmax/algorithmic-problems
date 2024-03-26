@@ -7,20 +7,24 @@ def foo():
     n, k = list(map(int, lines[0].split()))
     arr = list(map(int, lines[1].split()))
 
+    # print(n, k)
+
     d = defaultdict(int)
 
-    for a in arr[:k]:
+    for a in arr[:k + 1]:
         d[a] += 1
     for _, count in d.items():
         if count >= 2:
             return False
-    
-    for a in arr[k:]:
-        d[a] += 1
-        d[a - k] -= 1
-        for _, count in d.items():
-            if count >= 2:
-                return False
+
+    for i in range(k + 1, len(arr)):
+        d[arr[i]] += 1
+        d[arr[i - k - 1]] -= 1
+        # for index in range(i - k, i + 1):
+        if d[arr[i - k]] >= 2:
+            return False
+        if d[arr[i]] >= 2:
+            return False
 
     return True
 
