@@ -75,8 +75,9 @@ while len(commands) > 0:
 
     match = total_goals_for_pattern.match(command)
     if match:
-        player_name = match.group(1)
-        print(f"Total goals for '{player_name}'")
+        team_name = match.group(1)
+        total_goals = teams[team_name]['score_sum']
+        print(f"Done: Total goals for '{team_name}' ---> {total_goals}")
 
     # match = mean_goals_per_game_for_pattern.match(command)
     # if match:
@@ -86,17 +87,20 @@ while len(commands) > 0:
     if match:
         player_name = match.group(1)
         scores = players[player_name]
+        score_count = len(scores)
+        print(f"Done: Total goals by {player_name} ---> {score_count}")
+
+    match = mean_goals_per_game_by_pattern.match(command)
+    if match:
+        player_name = match.group(1)
+        scores = players[player_name]
         s = set()
         for score in scores:
             s.add(score['match_id'])
         match_count = len(s)
         score_count = len(scores)
-        total_goals = score_count / match_count
-        print(f"Done: Total goals by {player_name} ---> {total_goals}")
-    #
-    # match = mean_goals_per_game_by_pattern.match(command)
-    # if match:
-    #     print(f"Mean goals per game by {match.group(1)}")
+        mean_goals = score_count / match_count if match_count != 0 else 0
+        print(f"Done: Mean goals per game by {player_name} ---> {mean_goals}")
     #
     # match = goals_on_minute_pattern.match(command)
     # if match:
