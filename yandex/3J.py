@@ -89,6 +89,7 @@ for _ in range(100000):
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     count_of_parts_dict = get_count_of_parts_dict()
 
+    requests_dict = defaultdict(list)  # {devise: [<devises которые сделали request>]}
     chosen_parts_dict = {}
     for d in devices:
         # missing_parts = set([p for p in parts if p not in parts_of_device[d]])
@@ -108,30 +109,11 @@ for _ in range(100000):
         if chosen_part != float('inf'):
             chosen_parts_dict[d] = chosen_part
 
-
-
-    # sorted_parts = sorted(parts, key=lambda p: count_of_parts_dict[p])  # Отсортирую все parts по частоте отсутствия
-    # # print(f'{sorted_parts = }')
-    #
-    # # Каждое устройство выбирает отсутствующую на нем часть обновления, которая встречается в сети реже всего.
-    # # Если таких частей несколько, то выбирается отсутствующая на устройстве часть обновления с наименьшим номером.
-    # chosen_parts_dict = {}
-    # for d in devices:
-    #     missing_parts = set([p for p in parts if p not in parts_of_device[d]])
-    #     chosen_part = -1
-    #     for missing_part in sorted_parts[::-1]:
-    #         if missing_part in missing_parts:
-    #             chosen_part = missing_part
-    #     if chosen_part != -1:
-    #         chosen_parts_dict[d] = chosen_part
-    #     # print(f'{d = },  {chosen_part = }')
-
-    # После этого устройство делает запрос выбранной части обновления у одного из устройств, на котором такая часть обновления уже скачана.
-    # Если таких устройств несколько — выбирается устройство, на котором скачано наименьшее количество частей обновления.
-    # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
-    requests_dict = defaultdict(list)  # {devise: [<devises которые сделали request>]}
-    for d, _ in chosen_parts_dict.items():  # если нам вообще нужно делать запрос, то делаем запрос
-        chosen_part = chosen_parts_dict[d]
+        # После этого устройство делает запрос выбранной части обновления у одного из устройств, на котором такая часть обновления уже скачана.
+        # Если таких устройств несколько — выбирается устройство, на котором скачано наименьшее количество частей обновления.
+        # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
+    # for d, _ in chosen_parts_dict.items():  # если нам вообще нужно делать запрос, то делаем запрос
+    #     chosen_part = chosen_parts_dict[d]
 
         # составить список устройств, у которых есть эта часть
         devices_that_own_chosen_part = set([d for d in devices if chosen_part in parts_of_device[d]])
@@ -147,8 +129,9 @@ for _ in range(100000):
         )
 
         # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
-        best_device = devices_that_own_chosen_part_sorted_by_count_of_parts[0]
-        requests_dict[best_device].append(d)
+        if len(devices_that_own_chosen_part_sorted_by_count_of_parts) > 0:
+            best_device = devices_that_own_chosen_part_sorted_by_count_of_parts[0]
+            requests_dict[best_device].append(d)
 
     # После того, как все запросы отправлены, каждое устройство выбирает, чей запрос удовлетворить.
     # Устройство A удовлетворяет тот запрос, который поступил от наиболее ценного для A устройства.
