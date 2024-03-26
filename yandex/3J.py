@@ -6,11 +6,13 @@ n, k = list(map(int, lines[0].split()))
 
 ##################################
 
+global devices
+global parts
 devices = [d for d in range(n)]
 parts = [p for p in range(k)]
 
-print(f'{devices = }')
-print(f'{parts = }')
+# print(f'{devices = }')
+# print(f'{parts = }')
 
 ##################################
 
@@ -18,9 +20,11 @@ parts_of_device = defaultdict(set)
 parts_of_device[0] = set([p for p in range(k)])
 for i in range(1, n):
     parts_of_device[i] = set()
-print(f'{parts_of_device = }')
+# print(f'{parts_of_device = }')
 
 count_parts_received = [[0 for _1 in range(n)] for _2 in range(n)]
+
+timeslot_count = [0 for _ in range(n)]
 
 
 ##################################
@@ -69,8 +73,11 @@ def get_most_valuable_device(A, Bs):
 
 
 ##################################
+print(f'{parts_of_device = }')
 
-for i in range(1):
+for i in range(100):
+
+    # print(f'PARTS: {parts}')
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     count_of_parts_dict = get_count_of_parts_dict()
     sorted_parts = sorted(parts, key=lambda p: count_of_parts_dict[p])  # Отсортирую все parts по частоте отсутствия
@@ -88,7 +95,7 @@ for i in range(1):
                 chosen_part = missing_part
         if chosen_part != -1:
             chosen_parts_dict[d] = chosen_part
-        print(f'{d = },  {chosen_part = }')
+        # print(f'{d = },  {chosen_part = }')
 
     # После этого устройство делает запрос выбранной части обновления у одного из устройств, на котором такая часть обновления уже скачана.
     # Если таких устройств несколько — выбирается устройство, на котором скачано наименьшее количество частей обновления.
@@ -96,24 +103,24 @@ for i in range(1):
     requests_dict = defaultdict(list)  # {devise: [<devises которые сделали request>]}
     for d in devices:
         if d in chosen_parts_dict:  # если нам вообще нужно делать запрос, то делаем запрос
-            print(f'\nfor {d = }')
+            # print(f'\nfor {d = }')
             chosen_part = chosen_parts_dict[d]
 
             # составить список устройств, у которых есть эта часть
             devices_that_own_chosen_part = set([d for d in devices if chosen_part in parts_of_device[d]])
-            print(f'{devices_that_own_chosen_part = }')
+            # print(f'{devices_that_own_chosen_part = }')
 
             # выбрать из devices_that_own_chosen_part то, на котором скачано наименьшее количество частей обновления
             parts_of_device_count = {}
             for key, val in parts_of_device.items():
                 if key in devices_that_own_chosen_part:
                     parts_of_device_count[key] = len(val)
-            print(f'{parts_of_device_count = }')
+            # print(f'{parts_of_device_count = }')
             sorted_by_count_of_part_devices_that_own_chosen_part = sorted(
                 list(devices_that_own_chosen_part),
                 key=lambda d: (parts_of_device_count[d], devices.index(d))
             )
-            print(f'{sorted_by_count_of_part_devices_that_own_chosen_part = }')
+            # print(f'{sorted_by_count_of_part_devices_that_own_chosen_part = }')
 
             # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
             pass
@@ -121,17 +128,17 @@ for i in range(1):
             if len(sorted_by_count_of_part_devices_that_own_chosen_part) > 0:
                 best_device = sorted_by_count_of_part_devices_that_own_chosen_part[0]
                 requests_dict[best_device].append(d)
-    print(f'\n{requests_dict = }')
+    # print(f'\n{requests_dict = }')
 
     # После того, как все запросы отправлены, каждое устройство выбирает, чей запрос удовлетворить.
     # Устройство A удовлетворяет тот запрос, который поступил от наиболее ценного для A устройства.
     devices_for_sending_part = {}
     for d, ds_that_make_request in requests_dict.items():
-        print(d, ds_that_make_request)
+        # print(d, ds_that_make_request)
 
         # Ценность устройства B для устройства A определяется как количество частей обновления, ранее полученных устройством A от устройства B.
         valuable_devices = set(get_most_valuable_device(d, ds_that_make_request))
-        print(f'{valuable_devices = }')
+        # print(f'{valuable_devices = }')
 
         # Если на устройство A пришло несколько запросов от одинаково ценных устройств, то удовлетворяется запрос того устройства, на котором меньше всего скачанных частей обновления.
         parts_of_device_count = {}
@@ -150,5 +157,25 @@ for i in range(1):
 
         device_for_sending_part = sorted_by_count_of_part_devices_that_most_valuavle[0]
         devices_for_sending_part[d] = device_for_sending_part
-        print(f'{device_for_sending_part = }')
-    
+        # print(f'{device_for_sending_part = }')
+
+    # Устройства, чьи запросы удовлетворены, скачивают запрошенную часть обновления, а остальные не скачивают ничего.
+    for d, device_for_sending_part in devices_for_sending_part.items():
+        chosen_part = chosen_parts_dict[device_for_sending_part]
+        parts_of_device[device_for_sending_part].add(chosen_part)
+        B = d
+        A = device_for_sending_part
+        count_parts_received[A][B] += 1
+
+    print(f'{parts_of_device = }')
+
+    flag_to_break = True
+    for d, ps in parts_of_device.items():
+        if len(ps) != k:
+            timeslot_count[d] += 1
+            flag_to_break = False
+
+    if flag_to_break:
+        break
+
+print(timeslot_count[1:])
