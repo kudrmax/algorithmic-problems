@@ -7,29 +7,22 @@ def foo():
     n, k = list(map(int, lines[0].split()))
     arr = list(map(int, lines[1].split()))
 
-    # print(n, k, arr)
-
-    # if n == 1:
-    #     return 'NO'
-
     d = defaultdict(int)
 
-    for i in range(min(n, k)):
-        d[arr[i]] += 1
+    for a in arr[:k]:
+        d[a] += 1
+    for _, count in d.items():
+        if count >= 2:
+            return False
+    
+    for a in arr[k:]:
+        d[a] += 1
+        d[a - k] -= 1
+        for _, count in d.items():
+            if count >= 2:
+                return False
 
-    p1 = 0
-    p2 = min(n, k)
+    return True
 
-    while True:
-        for i in range(p1, p2 + 1):
-            if d[arr[i]] > 1:
-                return 'YES'
-        d[arr[p1]] -= 1
-        p1 += 1
-        p2 += 1
-        if p2 >= len(arr):
-            break
-        d[arr[p2]] += 1
-    return 'NO'
-
-print(foo())
+res = 'NO' if foo() else 'YES'
+print(res)
