@@ -8,6 +8,7 @@ n, k = list(map(int, lines[0].split()))
 
 devices = [d for d in range(n)]
 parts = [p for p in range(k)]
+parts_set = set([p for p in range(k)])
 
 # print(f'{devices = }')
 # print(f'{parts = }')
@@ -87,21 +88,43 @@ for _ in range(100000):
 
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     count_of_parts_dict = get_count_of_parts_dict()
-    sorted_parts = sorted(parts, key=lambda p: count_of_parts_dict[p])  # Отсортирую все parts по частоте отсутствия
-    # print(f'{sorted_parts = }')
 
-    # Каждое устройство выбирает отсутствующую на нем часть обновления, которая встречается в сети реже всего.
-    # Если таких частей несколько, то выбирается отсутствующая на устройстве часть обновления с наименьшим номером.
     chosen_parts_dict = {}
     for d in devices:
-        missing_parts = set([p for p in parts if p not in parts_of_device[d]])
-        chosen_part = -1
-        for missing_part in sorted_parts[::-1]:
-            if missing_part in missing_parts:
+        # missing_parts = set([p for p in parts if p not in parts_of_device[d]])
+        missing_parts = parts_set.difference(parts_of_device[d])
+        chosen_part = float('inf')
+        chosen_part_index = float('inf')
+        chosen_part_count = float('inf')
+        for missing_part in missing_parts:
+            count = count_of_parts_dict[missing_part]
+            if count < chosen_part_count:
                 chosen_part = missing_part
-        if chosen_part != -1:
+                chosen_part_count = count
+            elif count == chosen_part_count:
+                if missing_part < chosen_part:
+                    chosen_part = missing_part
+                    chosen_part_count = count
+        if chosen_part != float('inf'):
             chosen_parts_dict[d] = chosen_part
-        # print(f'{d = },  {chosen_part = }')
+
+
+
+    # sorted_parts = sorted(parts, key=lambda p: count_of_parts_dict[p])  # Отсортирую все parts по частоте отсутствия
+    # # print(f'{sorted_parts = }')
+    #
+    # # Каждое устройство выбирает отсутствующую на нем часть обновления, которая встречается в сети реже всего.
+    # # Если таких частей несколько, то выбирается отсутствующая на устройстве часть обновления с наименьшим номером.
+    # chosen_parts_dict = {}
+    # for d in devices:
+    #     missing_parts = set([p for p in parts if p not in parts_of_device[d]])
+    #     chosen_part = -1
+    #     for missing_part in sorted_parts[::-1]:
+    #         if missing_part in missing_parts:
+    #             chosen_part = missing_part
+    #     if chosen_part != -1:
+    #         chosen_parts_dict[d] = chosen_part
+    #     # print(f'{d = },  {chosen_part = }')
 
     # После этого устройство делает запрос выбранной части обновления у одного из устройств, на котором такая часть обновления уже скачана.
     # Если таких устройств несколько — выбирается устройство, на котором скачано наименьшее количество частей обновления.
@@ -171,3 +194,8 @@ for _ in range(100000):
     print(*timeslot_count[1:])
 
 print(*timeslot_count[1:])
+
+s1 = '5394 4883 1317 5430 6458 6447 2322 2897 5701 6419 5702 5261 4891 6150 6459 6166 6275 5232 6417 6266 6459 4894 5202 5793 3898 5790 6452 6030 4531 6154 6460 6363 4993 6337 4032 6458 5252 6114 6461 3910 6245 3408 4123 6235 6462 4261 6421 4279 6443 5391 5619 6461 4969 6244 4563 5990 6107 3788 3903 6094 4934 6264 6460 5794 6067 5498 6451 5425 5768 6462 5801 3466 6457 5530 6341 5944 6391 3367 6060 6036 5434 6172 6455 5922 4124 6463 4966 6435 6463 6339 6209 6464 6254 6464 5293 6465 5003 4242 4197'
+s2 = ' '.join([str(ch) for ch in timeslot_count[1:]])
+
+print(s1 == s2)
