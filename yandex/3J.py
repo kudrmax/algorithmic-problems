@@ -116,17 +116,15 @@ for i in range(100):
                 if key in devices_that_own_chosen_part:
                     parts_of_device_count[key] = len(val)
             # print(f'{parts_of_device_count = }')
-            sorted_by_count_of_part_devices_that_own_chosen_part = sorted(
+            devices_that_own_chosen_part_sorted_by_count_of_parts = sorted(
                 list(devices_that_own_chosen_part),
                 key=lambda d: (parts_of_device_count[d], devices.index(d))
             )
             # print(f'{sorted_by_count_of_part_devices_that_own_chosen_part = }')
 
             # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
-            pass
-
-            if len(sorted_by_count_of_part_devices_that_own_chosen_part) > 0:
-                best_device = sorted_by_count_of_part_devices_that_own_chosen_part[0]
+            if len(devices_that_own_chosen_part_sorted_by_count_of_parts) > 0:
+                best_device = devices_that_own_chosen_part_sorted_by_count_of_parts[0]
                 requests_dict[best_device].append(d)
     # print(f'\n{requests_dict = }')
 
@@ -146,16 +144,14 @@ for i in range(100):
             if key in valuable_devices:
                 parts_of_device_count[key] = len(val)
 
-        sorted_by_count_of_part_devices_that_most_valuavle = sorted(
+        devices_that_most_valuavle_sorted_by_count_of_part = sorted(
             list(valuable_devices),
             key=lambda d: (parts_of_device_count[d], devices.index(d))
         )
         # print(f'{sorted_by_count_of_part_devices_that_most_valuavle = }')
 
         # Если и таких запросов несколько, то среди них выбирается устройство с наименьшим номером.
-        pass
-
-        device_for_sending_part = sorted_by_count_of_part_devices_that_most_valuavle[0]
+        device_for_sending_part = devices_that_most_valuavle_sorted_by_count_of_part[0]
         devices_for_sending_part[d] = device_for_sending_part
         # print(f'{device_for_sending_part = }')
 
