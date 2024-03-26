@@ -27,24 +27,34 @@ timeslot_count = [1 for _ in range(n)]
 
 ##################################
 
-def get_count_of_part(p):
-    '''
-    Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
-    '''
-    count = 0
-    for key, val in parts_of_device.items():
-        if p in val:
-            count += 1
-    return count
-
+# def get_count_of_part(p):
+#     '''
+#     Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
+#     '''
+#     count = 0
+#     for key, val in parts_of_device.items():
+#         if p in val:
+#             count += 1
+#     return count
+#
+#
+# def get_count_of_parts_dict():
+#     '''
+#     Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
+#     '''
+#     count_of_parts = {}
+#     for p in parts:
+#         count_of_parts[p] = get_count_of_part(p)
+#     return count_of_parts
 
 def get_count_of_parts_dict():
     '''
     Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     '''
-    count_of_parts = {}
-    for p in parts:
-        count_of_parts[p] = get_count_of_part(p)
+    count_of_parts = defaultdict(int)
+    for d, ps in parts_of_device.items():
+        for p in ps:
+            count_of_parts[p] += 1
     return count_of_parts
 
 
@@ -158,7 +168,6 @@ for _ in range(100000):
 
     if flag_to_break:
         break
-    # if timeslot_count[1] > 5000:
-    # print(*timeslot_count[1:])
+    print(*timeslot_count[1:])
 
 print(*timeslot_count[1:])
