@@ -40,8 +40,8 @@ def add_data_to_players(name: str, time, match_id, team_name):
 # teams['HSE']['count_first_scores'] += 1
 
 
-print(players)
-print(teams)
+# print(players)
+# print(teams)
 
 while len(commands) > 0:
     command = commands.pop()
@@ -54,7 +54,7 @@ while len(commands) > 0:
         score2 = int(match.group(4))
         match_id = f"{team1_name} - {team2_name} {score1}:{score2}"
 
-        print(f"Done: {team1_name} - {team2_name} {score1}:{score2}")
+        # print(f"Done: {team1_name} - {team2_name} {score1}:{score2}")
 
         time1, time2 = 0, 0
         player1_name, player2_name = '', ''
@@ -66,7 +66,7 @@ while len(commands) > 0:
                     player_name = match.group(1)
                     time = int(match.group(2))
                     add_data_to_players(name=player_name, time=time, match_id=match_id, team_name=team_name)
-                    print(f"Done: {player_name} {time}")
+                    # print(f"Done: {player_name} {time}")
                     if i == 0 and team_name == team1_name:
                         time1 = time
                         player1_name = player_name
@@ -76,6 +76,8 @@ while len(commands) > 0:
 
         teams[team1_name]['score_sum'] += score1
         teams[team1_name]['count_of_matches'] += 1
+        teams[team2_name]['score_sum'] += score2
+        teams[team2_name]['count_of_matches'] += 1
 
         if time1 < time2:
             teams[team1_name]['count_first_scores'] += 1
@@ -92,7 +94,8 @@ while len(commands) > 0:
     if match:
         team_name = match.group(1)
         total_goals = teams[team_name]['score_sum']
-        print(f"Done: Total goals for '{team_name}' ---> {total_goals}")
+        # print(f"Done: Total goals for '{team_name}' ---> {total_goals}")
+        print(total_goals)
 
     match = mean_goals_per_game_for_pattern.match(command)
     if match:
@@ -100,14 +103,16 @@ while len(commands) > 0:
         score_count = teams[team_name]['score_sum']
         match_count = teams[team_name]['count_of_matches']
         mean_goals = score_count / match_count if match_count != 0 else 0
-        print(f"Done: Mean goals per game for {team_name} ---> {mean_goals}")
+        # print(f"Done: Mean goals per game for {team_name} ---> {mean_goals}")
+        print(mean_goals)
 
     match = total_goals_by_pattern.match(command)
     if match:
         player_name = match.group(1)
         scores = players[player_name]['scores'] if 'scores' in players[player_name] else []
         score_count = len(scores)
-        print(f"Done: Total goals by {player_name} ---> {score_count}")
+        # print(f"Done: Total goals by {player_name} ---> {score_count}")
+        print(score_count)
 
     match = mean_goals_per_game_by_pattern.match(command)
     if match:
@@ -117,7 +122,9 @@ while len(commands) > 0:
         match_count = teams[team_name]['count_of_matches']
         score_count = len(scores)
         mean_goals = score_count / match_count if match_count != 0 else 0
-        print(f"Done: Mean goals per game by {player_name} ---> {mean_goals}")
+        # print(f"THIS: Mean goals per game by {player_name} ---> {mean_goals}")
+        # print(f'{score_count = }, {match_count = }')
+        print(mean_goals)
 
     match = goals_on_minute_pattern.match(command)
     if match:
@@ -130,7 +137,8 @@ while len(commands) > 0:
             t = score['time']
             if t == time:
                 scores_sum += 1
-        print(f"Done: Goals on minute {time} by {player_name} ---> {scores_sum}")
+        # print(f"Done: Goals on minute {time} by {player_name} ---> {scores_sum}")
+        print(scores_sum)
 
     match = goals_on_first_t_minutes_pattern.match(command)
     if match:
@@ -143,7 +151,8 @@ while len(commands) > 0:
             t = score['time']
             if t <= time:
                 scores_sum += 1
-        print(f"Done: Goals on first {time} minutes by {player_name} ---> {scores_sum}")
+        # print(f"Done: Goals on first {time} minutes by {player_name} ---> {scores_sum}")
+        print(scores_sum)
 
     match = goals_on_last_t_minutes_pattern.match(command)
     if match:
@@ -156,7 +165,8 @@ while len(commands) > 0:
             t = score['time']
             if t >= 91 - time and t <= 90:
                 scores_sum += 1
-        print(f"THIS: Goals on last {time} minutes by {player_name} ---> {scores_sum}")
+        # print(f"THIS: Goals on last {time} minutes by {player_name} ---> {scores_sum}")
+        print(scores_sum)
 
     match = score_opens_by_team_pattern.match(command)
     if match:
@@ -170,6 +180,7 @@ while len(commands) > 0:
             open_score = teams[team_or_player_name]['count_first_scores']
         else:
             open_score = players[team_or_player_name]['count_first_scores'] if team_or_player_name in players else 0
-        print(f"Score opens by {team_or_player_name} ---> {open_score}")
+        # print(f"Score opens by {team_or_player_name} ---> {open_score}")
+        print(open_score)
 
-print(players)
+# print(players)
