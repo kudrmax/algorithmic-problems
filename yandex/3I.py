@@ -1,6 +1,8 @@
 import collections
 import re
 
+print_list = []
+
 total_goals_for_pattern = re.compile(r'Total goals for "?([^"]+)"?')
 mean_goals_per_game_for_pattern = re.compile(r'Mean goals per game for "?([^"]+)"?')
 total_goals_by_pattern = re.compile(r'Total goals by "?([^"]+)"?')
@@ -93,18 +95,20 @@ while len(commands) > 0:
     match = total_goals_for_pattern.match(command)
     if match:
         team_name = match.group(1)
-        total_goals = teams[team_name]['score_sum']
+        total_goals = teams[team_name]['score_sum'] if team_name in teams else 0
         # print(f"Done: Total goals for '{team_name}' ---> {total_goals}")
-        print(total_goals)
+        print_list.append(total_goals)
+        # print(total_goals)
 
     match = mean_goals_per_game_for_pattern.match(command)
     if match:
         team_name = match.group(1)
-        score_count = teams[team_name]['score_sum']
-        match_count = teams[team_name]['count_of_matches']
+        score_count = teams[team_name]['score_sum'] if team_name in teams else 0
+        match_count = teams[team_name]['count_of_matches'] if team_name in teams else 0
         mean_goals = score_count / match_count if match_count != 0 else 0
         # print(f"Done: Mean goals per game for {team_name} ---> {mean_goals}")
-        print(mean_goals)
+        print_list.append(mean_goals)
+        # print(mean_goals)
 
     match = total_goals_by_pattern.match(command)
     if match:
@@ -112,19 +116,21 @@ while len(commands) > 0:
         scores = players[player_name]['scores'] if 'scores' in players[player_name] else []
         score_count = len(scores)
         # print(f"Done: Total goals by {player_name} ---> {score_count}")
-        print(score_count)
+        print_list.append(score_count)
+        # print(score_count)
 
     match = mean_goals_per_game_by_pattern.match(command)
     if match:
         player_name = match.group(1)
-        scores = players[player_name]['scores']
+        scores = players[player_name]['scores'] if player_name in players else []
         team_name = players[player_name]['team_name']
         match_count = teams[team_name]['count_of_matches']
         score_count = len(scores)
         mean_goals = score_count / match_count if match_count != 0 else 0
         # print(f"THIS: Mean goals per game by {player_name} ---> {mean_goals}")
         # print(f'{score_count = }, {match_count = }')
-        print(mean_goals)
+        print_list.append(mean_goals)
+        # print(mean_goals)
 
     match = goals_on_minute_pattern.match(command)
     if match:
@@ -138,7 +144,8 @@ while len(commands) > 0:
             if t == time:
                 scores_sum += 1
         # print(f"Done: Goals on minute {time} by {player_name} ---> {scores_sum}")
-        print(scores_sum)
+        print_list.append(scores_sum)
+        # print(scores_sum)
 
     match = goals_on_first_t_minutes_pattern.match(command)
     if match:
@@ -152,7 +159,8 @@ while len(commands) > 0:
             if t <= time:
                 scores_sum += 1
         # print(f"Done: Goals on first {time} minutes by {player_name} ---> {scores_sum}")
-        print(scores_sum)
+        print_list.append(scores_sum)
+        # print(scores_sum)
 
     match = goals_on_last_t_minutes_pattern.match(command)
     if match:
@@ -166,7 +174,8 @@ while len(commands) > 0:
             if t >= 91 - time and t <= 90:
                 scores_sum += 1
         # print(f"THIS: Goals on last {time} minutes by {player_name} ---> {scores_sum}")
-        print(scores_sum)
+        print_list.append(scores_sum)
+        # print(scores_sum)
 
     match = score_opens_by_team_pattern.match(command)
     if match:
@@ -179,11 +188,25 @@ while len(commands) > 0:
         open_score = 0
         if is_team:
             open_score = teams[team_or_player_name]['count_first_scores']
+            print(team_or_player_name, open_score)
         else:
             if team_or_player_name in players:
                 if 'count_first_scores' in players[team_or_player_name]:
                     open_score = players[team_or_player_name]['count_first_scores']
         # print(f"Score opens by {team_or_player_name} ---> {open_score}")
-        print(open_score)
+        print_list.append(open_score)
+        # print(open_score)
 
 # print(players)
+
+with open('output.txt', 'r') as file:
+    lines = file.readlines()
+print_list_true = ''
+for line in lines:
+    print_list_true += line.split()[0] + ' '
+
+print(*print_list)
+print(print_list_true)
+
+print(teams.keys())
+print(players.keys())
