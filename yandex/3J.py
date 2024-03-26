@@ -53,10 +53,12 @@ def get_count_of_parts_dict():
     Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     '''
     count_of_parts = defaultdict(int)
+    part_to_devices = defaultdict(set)
     for d, ps in parts_of_device.items():
         for p in ps:
             count_of_parts[p] += 1
-    return count_of_parts
+            part_to_devices[p].add(d)
+    return count_of_parts, part_to_devices
 
 
 def get_most_valuable_device(A, Bs):
@@ -90,7 +92,7 @@ for key, val in parts_of_device.items():
 for _ in range(100000):
 
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
-    count_of_parts_dict = get_count_of_parts_dict()
+    count_of_parts_dict, part_to_devices = get_count_of_parts_dict()
 
     requests_dict = defaultdict(list)  # {devise: [<devises которые сделали request>]}
     chosen_parts_dict = {}
@@ -117,7 +119,8 @@ for _ in range(100000):
         # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
 
         # составить список устройств, у которых есть эта часть
-        devices_that_own_chosen_part = set([d_i for d_i in devices if chosen_part in parts_of_device[d_i]])
+        # devices_that_own_chosen_part = set([d_i for d_i in devices if chosen_part in parts_of_device[d_i]])
+        devices_that_own_chosen_part = part_to_devices[chosen_part]
 
         # выбрать из devices_that_own_chosen_part то, на котором скачано наименьшее количество частей
         min_count = float('inf')
