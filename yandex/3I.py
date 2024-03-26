@@ -11,8 +11,12 @@ goals_on_minute_pattern = re.compile(r'Goals on minute (\d+) by "?([^"]+)"?')
 goals_on_first_t_minutes_pattern = re.compile(r'Goals on first (\d+) minutes by "?([^"]+)"?')
 goals_on_last_t_minutes_pattern = re.compile(r'Goals on last (\d+) minutes by "?([^"]+)"?')
 # score_opens_by_team_pattern = re.compile(r'Score opens by "?([^"]+)"?')
-score_opens_by_team_pattern = re.compile(r'Score opens by ("?)([^"]+)\1')
+
+score_opens_by_team_or_player_pattern = re.compile(r'Score opens by ("?)([^"]+)\1')
 # score_opens_by_player_pattern = re.compile(r'Score opens by "?([^"]+)"?')
+# score_opens_by_team_pattern = re.compile(r'Score opens by "(.*?)"')
+# score_opens_by_player_pattern = re.compile(r'Score opens by (.*?)')
+
 match_score_pattern = re.compile(r'"(.*?)" - "(.*?)" (\d+):(\d+)')
 goal_pattern = re.compile(r'"?([^"]+)"? (\d+)\'')
 
@@ -59,7 +63,10 @@ while len(commands) > 0:
 
         # print(f"Done: {team1_name} - {team2_name} {score1}:{score2}")
 
-        time1, time2 = 0, 0
+        if team1_name == "IUnFr T TGn jG mGnj QAZNfAFDgb" or team2_name == "IUnFr T TGn jG mGnj QAZNfAFDgb":
+            pass
+
+        time1, time2 = 999, 999
         player1_name, player2_name = '', ''
         for score, team_name in zip([score1, score2], [team1_name, team2_name]):
             for i in range(score):
@@ -92,6 +99,7 @@ while len(commands) > 0:
             if 'count_first_scores' not in players[player2_name]:
                 players[player2_name]['count_first_scores'] = 0
             players[player2_name]['count_first_scores'] += 1
+            temp = teams[team2_name]
 
     match = total_goals_for_pattern.match(command)
     if match:
@@ -169,6 +177,8 @@ while len(commands) > 0:
         player_name = match.group(2)
         scores = players[player_name]['scores'] if 'scores' in players[player_name] else []
         scores_sum = 0
+        if player_name == 'Mw HVhF UZOv zPwVSKJ lB r BuhX':
+            pass
         for score in scores:
             # print(score)
             t = score['time']
@@ -178,10 +188,26 @@ while len(commands) > 0:
         print_list.append(scores_sum)
         # print(scores_sum)
 
-    match = score_opens_by_team_pattern.match(command)
+    # match = score_opens_by_team_pattern.match(command)
+    # if match:
+    #     team_name = match.group(1)
+    #     open_score = teams[team_name]['count_first_scores'] if team_name in teams else 0
+    #     print_list.append(open_score)
+    #
+    # match = score_opens_by_player_pattern.match(command)
+    # if match:
+    #     player_name = match.group(1)
+    #     open_score = 0
+    #     if player_name in players:
+    #         open_score = players[player_name]['count_first_scores'] if 'count_first_scores' in players[player_name] else 0
+    #     print_list.append(open_score)
+    match = score_opens_by_team_or_player_pattern.match(command)
     if match:
         is_team = bool(match.group(1))
         team_or_player_name = match.group(2)
+
+        if team_or_player_name == 'IUnFr T TGn jG mGnj QAZNfAFDgb':
+            pass
         # team_or_player_name = match.group(1)
 
         # is_team = False
@@ -202,7 +228,7 @@ while len(commands) > 0:
 
 # print(players)
 
-# print(*print_list)
+print(*print_list)
 
 ##############################
 with open('output.txt', 'r') as file:
@@ -218,6 +244,7 @@ print_list_true = print_list_true.split()
 # print(teams.keys())
 # print(players.keys())
 
-for i in range(len(print_list_true)):
-    if round(float(print_list_true[i]), 5) != round(float(print_list[i]), 5):
-        print(i, print_list_true[i], print_list[i])
+# print('true, mine')
+# for i in range(len(print_list_true)):
+#     if round(float(print_list_true[i]), 5) != round(float(print_list[i]), 5):
+#         print(i + 1, print_list_true[i], print_list[i])
