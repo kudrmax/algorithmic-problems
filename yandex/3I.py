@@ -10,8 +10,9 @@ mean_goals_per_game_by_pattern = re.compile(r'Mean goals per game by "?([^"]+)"?
 goals_on_minute_pattern = re.compile(r'Goals on minute (\d+) by "?([^"]+)"?')
 goals_on_first_t_minutes_pattern = re.compile(r'Goals on first (\d+) minutes by "?([^"]+)"?')
 goals_on_last_t_minutes_pattern = re.compile(r'Goals on last (\d+) minutes by "?([^"]+)"?')
-score_opens_by_team_pattern = re.compile(r'Score opens by "?([^"]+)"?')
-score_opens_by_player_pattern = re.compile(r'Score opens by "?([^"]+)"?')
+# score_opens_by_team_pattern = re.compile(r'Score opens by "?([^"]+)"?')
+score_opens_by_team_pattern = re.compile(r'Score opens by ("?)([^"]+)\1')
+# score_opens_by_player_pattern = re.compile(r'Score opens by "?([^"]+)"?')
 match_score_pattern = re.compile(r'"(.*?)" - "(.*?)" (\d+):(\d+)')
 goal_pattern = re.compile(r'"?([^"]+)"? (\d+)\'')
 
@@ -179,34 +180,44 @@ while len(commands) > 0:
 
     match = score_opens_by_team_pattern.match(command)
     if match:
-        team_or_player_name = match.group(1)
+        is_team = bool(match.group(1))
+        team_or_player_name = match.group(2)
+        # team_or_player_name = match.group(1)
 
-        is_team = False
-        if team_or_player_name in teams:
-            is_team = True
+        # is_team = False
+        # if team_or_player_name in teams:
+        #     is_team = True
 
         open_score = 0
         if is_team:
-            open_score = teams[team_or_player_name]['count_first_scores']
-            print(team_or_player_name, open_score)
+            open_score = teams[team_or_player_name]['count_first_scores'] if team_or_player_name in teams else 0
+            # print(team_or_player_name, open_score)
         else:
             if team_or_player_name in players:
-                if 'count_first_scores' in players[team_or_player_name]:
-                    open_score = players[team_or_player_name]['count_first_scores']
+                open_score = players[team_or_player_name]['count_first_scores'] if 'count_first_scores' in players[
+                    team_or_player_name] else 0
         # print(f"Score opens by {team_or_player_name} ---> {open_score}")
         print_list.append(open_score)
         # print(open_score)
 
 # print(players)
 
+# print(*print_list)
+
+##############################
 with open('output.txt', 'r') as file:
     lines = file.readlines()
 print_list_true = ''
 for line in lines:
     print_list_true += line.split()[0] + ' '
+# print(print_list_true)
+#############################
 
-print(*print_list)
-print(print_list_true)
+print_list_true = print_list_true.split()
 
-print(teams.keys())
-print(players.keys())
+# print(teams.keys())
+# print(players.keys())
+
+for i in range(len(print_list_true)):
+    if round(float(print_list_true[i]), 5) != round(float(print_list[i]), 5):
+        print(i, print_list_true[i], print_list[i])
