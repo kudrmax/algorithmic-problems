@@ -6,8 +6,6 @@ n, k = list(map(int, lines[0].split()))
 
 ##################################
 
-global devices
-global parts
 devices = [d for d in range(n)]
 parts = [p for p in range(k)]
 
@@ -24,7 +22,7 @@ for i in range(1, n):
 
 count_parts_received = [[0 for _1 in range(n)] for _2 in range(n)]
 
-timeslot_count = [0 for _ in range(n)]
+timeslot_count = [1 for _ in range(n)]
 
 
 ##################################
@@ -73,16 +71,15 @@ def get_most_valuable_device(A, Bs):
 
 
 ##################################
-print(f'{parts_of_device = }')
+# print(f'{parts_of_device = }')
 
-for i in range(100):
+for _ in range(100000):
 
     # print(f'PARTS: {parts}')
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     count_of_parts_dict = get_count_of_parts_dict()
     sorted_parts = sorted(parts, key=lambda p: count_of_parts_dict[p])  # Отсортирую все parts по частоте отсутствия
-    # print(count_of_parts_dict)
-    # print(sorted_parts)
+    # print(f'{sorted_parts = }')
 
     # Каждое устройство выбирает отсутствующую на нем часть обновления, которая встречается в сети реже всего.
     # Если таких частей несколько, то выбирается отсутствующая на устройстве часть обновления с наименьшим номером.
@@ -90,7 +87,7 @@ for i in range(100):
     for d in devices:
         missing_parts = set([p for p in parts if p not in parts_of_device[d]])
         chosen_part = -1
-        for missing_part in sorted_parts:
+        for missing_part in sorted_parts[::-1]:
             if missing_part in missing_parts:
                 chosen_part = missing_part
         if chosen_part != -1:
@@ -174,4 +171,4 @@ for i in range(100):
     if flag_to_break:
         break
 
-print(timeslot_count[1:])
+print(*timeslot_count[1:])
