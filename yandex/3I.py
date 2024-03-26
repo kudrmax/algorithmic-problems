@@ -89,17 +89,18 @@ while len(commands) > 0:
         teams[team2_name]['score_sum'] += score2
         teams[team2_name]['count_of_matches'] += 1
 
-        if time1 < time2:
-            teams[team1_name]['count_first_scores'] += 1
-            if 'count_first_scores' not in players[player1_name]:
-                players[player1_name]['count_first_scores'] = 0
-            players[player1_name]['count_first_scores'] += 1
-        else:
-            teams[team2_name]['count_first_scores'] += 1
-            if 'count_first_scores' not in players[player2_name]:
-                players[player2_name]['count_first_scores'] = 0
-            players[player2_name]['count_first_scores'] += 1
-            temp = teams[team2_name]
+        if score1 !=0 or score2 != 0:
+            if time1 < time2:
+                teams[team1_name]['count_first_scores'] += 1
+                if 'count_first_scores' not in players[player1_name]:
+                    players[player1_name]['count_first_scores'] = 0
+                players[player1_name]['count_first_scores'] += 1
+            else:
+                teams[team2_name]['count_first_scores'] += 1
+                if 'count_first_scores' not in players[player2_name]:
+                    players[player2_name]['count_first_scores'] = 0
+                players[player2_name]['count_first_scores'] += 1
+                temp = teams[team2_name]
 
     match = total_goals_for_pattern.match(command)
     if match:
