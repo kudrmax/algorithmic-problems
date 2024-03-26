@@ -1,27 +1,3 @@
-# 5
-# 10 1 10 3 4
-# 4
-# 1 10
-# 2 9
-# 3 4
-# 2 2
-
-def binary_search(arr, target):
-    left, right = 0, len(arr) - 1
-
-    while left <= right:
-        mid = (left + right) // 2
-        mid_val = arr[mid]
-
-        if mid_val == target:
-            return mid
-        elif mid_val < target:
-            left = mid + 1
-        else:
-            right = mid - 1
-
-    return -1
-
 with open('input.txt', 'r') as file:
     lines = file.readlines()
 
@@ -31,12 +7,37 @@ k = list(map(int, lines[2].split()))[0]
 pairs = []
 for line in lines[3:]:
     pair = tuple(map(int, line.split()))
-    pairs.append(pair)
+    if len(pair) > 0:
+        pairs.append(pair)
+arr.sort()
+# print(arr)
+# print(pairs)
+
+
+def bs_left(arr, target):
+    left, right = 0, len(arr)
+    while left < right:
+        mid = (left + right) // 2
+        if arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid
+    return left
+
+
+def bs_right(arr, target):
+    left, right = 0, len(arr)
+    while left < right:
+        mid = (left + right) // 2
+        if arr[mid] <= target:
+            left = mid + 1
+        else:
+            right = mid
+    return left
+
 
 for L, R in pairs:
-    if L > R:
-        continue
-    left = binary_search(arr, L)
-    right = binary_search(arr, R)
-    if left == -1:
-        pass
+    l = bs_left(arr, L)
+    r = bs_right(arr, R)
+    count = r - l
+    print(count, end=' ')
