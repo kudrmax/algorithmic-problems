@@ -160,15 +160,17 @@ for _ in range(100000):
         A = device_for_sending_part
         count_parts_received[A][B] += 1
 
-    print(f'{parts_of_device = }')
+    # print(f'{parts_of_device = }')
 
     flag_to_break = True
     for d, ps in parts_of_device.items():
-        if len(ps) != k:
+        if len(ps) != k and d != 0:
             timeslot_count[d] += 1
             flag_to_break = False
 
     if flag_to_break:
         break
+    # if timeslot_count[1] > 5000:
+    # print(*timeslot_count[1:])
 
 print(*timeslot_count[1:])
