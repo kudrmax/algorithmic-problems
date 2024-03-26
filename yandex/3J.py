@@ -83,8 +83,10 @@ for i in range(1):
                 if key in devices_that_own_chosen_part:
                     parts_of_device_count[key] = len(val)
             print(f'{parts_of_device_count = }')
-            sorted_devices_that_own_chosen_part_by_count_of_part = sorted(list(devices_that_own_chosen_part),
-                                                                          key=lambda d: parts_of_device_count[d])
+            sorted_devices_that_own_chosen_part_by_count_of_part = sorted(
+                list(devices_that_own_chosen_part),
+                key=lambda d: (parts_of_device_count[d], devices.index(d))
+            )
             print(f'{sorted_devices_that_own_chosen_part_by_count_of_part = }')
 
             # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
