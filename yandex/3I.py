@@ -28,6 +28,8 @@ def add_data_to_players(name: str, time, match_id, team_name):
     score = {'match_id': match_id, 'time': time}
     if 'scores' not in players[name]:
         players[name]['scores'] = []
+    if 'count_first_scores' not in players[player1_name]:
+        players[player1_name]['count_first_scores'] = 0
     players[name]['scores'].append(score)
     players[name]['team_name'] = team_name
 
@@ -55,6 +57,7 @@ while len(commands) > 0:
         print(f"Done: {team1_name} - {team2_name} {score1}:{score2}")
 
         time1, time2 = 0, 0
+        player1_name, player2_name = '', ''
         for score, team_name in zip([score1, score2], [team1_name, team2_name]):
             for i in range(score):
                 command = commands.pop()
@@ -66,16 +69,24 @@ while len(commands) > 0:
                     print(f"Done: {player_name} {time}")
                     if i == 0 and team_name == team1_name:
                         time1 = time
+                        player1_name = player_name
                     if i == 0 and team_name == team2_name:
                         time2 = time
+                        player2_name = player_name
 
         teams[team1_name]['score_sum'] += score1
         teams[team1_name]['count_of_matches'] += 1
 
         if time1 < time2:
             teams[team1_name]['count_first_scores'] += 1
+            if 'count_first_scores' not in players[player1_name]:
+                players[player1_name]['count_first_scores'] = 0
+            players[player1_name]['count_first_scores'] += 1
         else:
             teams[team2_name]['count_first_scores'] += 1
+            if 'count_first_scores' not in players[player2_name]:
+                players[player2_name]['count_first_scores'] = 0
+            players[player2_name]['count_first_scores'] += 1
 
     match = total_goals_for_pattern.match(command)
     if match:
@@ -104,11 +115,6 @@ while len(commands) > 0:
         scores = players[player_name]['scores']
         team_name = players[player_name]['team_name']
         match_count = teams[team_name]['count_of_matches']
-        # s = set()
-        # for score in scores:
-        #     s.add(score['match_id'])
-        # match_count = len(s)
-
         score_count = len(scores)
         mean_goals = score_count / match_count if match_count != 0 else 0
         print(f"Done: Mean goals per game by {player_name} ---> {mean_goals}")
@@ -136,7 +142,7 @@ while len(commands) > 0:
         if is_team:
             open_score = teams[team_or_player_name]['count_first_scores']
         else:
-            open_score = 0
+            open_score = players[team_or_player_name]['count_first_scores']
         print(f"Score opens by {team_or_player_name} ---> {open_score}")
 
 print(players)
