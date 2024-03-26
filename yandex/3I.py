@@ -28,8 +28,8 @@ def add_data_to_players(name: str, time, match_id, team_name):
     score = {'match_id': match_id, 'time': time}
     if 'scores' not in players[name]:
         players[name]['scores'] = []
-    if 'count_first_scores' not in players[player1_name]:
-        players[player1_name]['count_first_scores'] = 0
+    if 'count_first_scores' not in players[name]:
+        players[name]['count_first_scores'] = 0
     players[name]['scores'].append(score)
     players[name]['team_name'] = team_name
 
@@ -142,7 +142,7 @@ while len(commands) > 0:
         if is_team:
             open_score = teams[team_or_player_name]['count_first_scores']
         else:
-            open_score = players[team_or_player_name]['count_first_scores']
+            open_score = players[team_or_player_name]['count_first_scores'] if team_or_player_name in players else 0
         print(f"Score opens by {team_or_player_name} ---> {open_score}")
 
 print(players)
