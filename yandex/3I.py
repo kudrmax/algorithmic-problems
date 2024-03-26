@@ -48,21 +48,35 @@ while len(commands) > 0:
         score1 = int(match.group(3))
         score2 = int(match.group(4))
         match_id = f"{team1_name} - {team2_name} {score1}:{score2}"
-        print(f"Done: {team1_name} - {team2_name} {score1}:{score2}")
 
+        time1, time2 = 0, 0
         for i in range(score1 + score2):
             command = commands.pop()
             match = goal_pattern.match(command)
             if match:
                 player_name = match.group(1)
-                time = match.group(2)
+                time = int(match.group(2))
                 add_data_to_players(name=player_name, time=time, match_id=match_id)
                 print(f"Done: {player_name} {time}")
+                if i == 0:
+                    time1 = time
+                if i == i + score1:
+                    time2 = time
 
-    # match = total_goals_for_pattern.match(command)
-    # if match:
-    #     player_name = match.group(1)
-    #     print(f"Total goals for '{player_name}'")
+        teams[team1_name]['score_sum'] += score1
+        teams[team1_name]['count_of_matches'] += 1
+
+        if time1 < time2:
+            teams[team1_name]['count_first_scores'] += 1
+        else:
+            teams[team2_name]['count_first_scores'] += 1
+
+        print(f"Done: {team1_name} - {team2_name} {score1}:{score2}")
+
+    match = total_goals_for_pattern.match(command)
+    if match:
+        player_name = match.group(1)
+        print(f"Total goals for '{player_name}'")
 
     # match = mean_goals_per_game_for_pattern.match(command)
     # if match:
