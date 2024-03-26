@@ -127,10 +127,16 @@ while len(commands) > 0:
 
     match = score_opens_by_team_pattern.match(command)
     if match:
-        print(f"Score opens by {match.group(1)}")
+        team_or_player_name = match.group(1)
 
-    match = score_opens_by_player_pattern.match(command)
-    if match:
-        print(f"Score opens by {match.group(1)}")
+        is_team = False
+        if team_or_player_name in teams:
+            is_team = True
+
+        if is_team:
+            open_score = teams[team_or_player_name]['count_first_scores']
+        else:
+            open_score = 0
+        print(f"Score opens by {team_or_player_name} ---> {open_score}")
 
 print(players)
