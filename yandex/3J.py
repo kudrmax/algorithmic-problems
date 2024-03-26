@@ -9,6 +9,9 @@ n, k = list(map(int, lines[0].split()))
 devices = [d for d in range(n)]
 parts = [p for p in range(k)]
 
+print(f'{devices = }')
+print(f'{parts = }')
+
 ##################################
 
 parts_of_device = defaultdict(set)
@@ -31,6 +34,9 @@ def get_count_of_part(p):
 
 
 def get_count_of_parts_dict():
+    '''
+    Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
+    '''
     count_of_parts = {}
     for p in parts:
         count_of_parts[p] = get_count_of_part(p)
@@ -39,19 +45,19 @@ def get_count_of_parts_dict():
 
 for i in range(1):
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
-    count_of_parts = get_count_of_parts_dict()
-    # Отсортирую все parts по частоте отсутствия
-    count_of_parts_list = sorted(parts, key=lambda p: count_of_parts[p])
-    print(count_of_parts)
-    print(count_of_parts_list)
+    count_of_parts_dict = get_count_of_parts_dict()
+    sorted_parts = sorted(parts, key=lambda p: count_of_parts_dict[p]) # Отсортирую все parts по частоте отсутствия
+    # print(count_of_parts_dict)
+    # print(sorted_parts)
 
     # Каждое устройство выбирает отсутствующую на нем часть обновления, которая встречается в сети реже всего.
     # Если таких частей несколько, то выбирается отсутствующая на устройстве часть обновления с наименьшим номером.
     for d in devices:
-        # print(parts_of_device[d])
-        missing_parts = [p for p in parts if p not in parts_of_device[d]]
-        # print(missing_parts)
-        for missing_part in missing_parts:
-            pass
+        missing_parts = set([p for p in parts if p not in parts_of_device[d]])
+        this_missing_part = -1
+        for missing_part in sorted_parts:
+            if missing_part in missing_parts:
+                this_missing_part = missing_part
+        print(f'{d = },  {this_missing_part = }')
 
 
