@@ -88,6 +88,10 @@ for _ in range(100000):
 
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     count_of_parts_dict = get_count_of_parts_dict()
+    count_of_parts_in_device_dict = defaultdict(int)
+
+    for key, val in parts_of_device.items():
+        count_of_parts_in_device_dict[key] = len(val)
 
     requests_dict = defaultdict(list)  # {devise: [<devises которые сделали request>]}
     chosen_parts_dict = {}
@@ -122,7 +126,7 @@ for _ in range(100000):
         min_count = float('inf')
         min_device = float('inf')
         for device_that_own_chosen_part in devices_that_own_chosen_part:
-            count = count_of_parts_dict[device_that_own_chosen_part]
+            count = count_of_parts_in_device_dict[device_that_own_chosen_part]
             if count < min_count:
                 min_device = device_that_own_chosen_part
                 min_count = count
@@ -187,11 +191,11 @@ for _ in range(100000):
 
     if flag_to_break:
         break
-    print(*timeslot_count[1:])
+    # print(*timeslot_count[1:])
 
 print(*timeslot_count[1:])
 
-s1 = '5394 4883 1317 5430 6458 6447 2322 2897 5701 6419 5702 5261 4891 6150 6459 6166 6275 5232 6417 6266 6459 4894 5202 5793 3898 5790 6452 6030 4531 6154 6460 6363 4993 6337 4032 6458 5252 6114 6461 3910 6245 3408 4123 6235 6462 4261 6421 4279 6443 5391 5619 6461 4969 6244 4563 5990 6107 3788 3903 6094 4934 6264 6460 5794 6067 5498 6451 5425 5768 6462 5801 3466 6457 5530 6341 5944 6391 3367 6060 6036 5434 6172 6455 5922 4124 6463 4966 6435 6463 6339 6209 6464 6254 6464 5293 6465 5003 4242 4197'
-s2 = ' '.join([str(ch) for ch in timeslot_count[1:]])
-
-print(s1 == s2)
+# s1 = '5394 4883 1317 5430 6458 6447 2322 2897 5701 6419 5702 5261 4891 6150 6459 6166 6275 5232 6417 6266 6459 4894 5202 5793 3898 5790 6452 6030 4531 6154 6460 6363 4993 6337 4032 6458 5252 6114 6461 3910 6245 3408 4123 6235 6462 4261 6421 4279 6443 5391 5619 6461 4969 6244 4563 5990 6107 3788 3903 6094 4934 6264 6460 5794 6067 5498 6451 5425 5768 6462 5801 3466 6457 5530 6341 5944 6391 3367 6060 6036 5434 6172 6455 5922 4124 6463 4966 6435 6463 6339 6209 6464 6254 6464 5293 6465 5003 4242 4197'
+# s2 = ' '.join([str(ch) for ch in timeslot_count[1:]])
+#
+# print(s1 == s2)
