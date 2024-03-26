@@ -104,17 +104,33 @@ for _ in range(100000):
         devices_that_own_chosen_part = set([d for d in devices if chosen_part in parts_of_device[d]])
 
         # выбрать из devices_that_own_chosen_part то, на котором скачано наименьшее количество частей обновления
-        parts_of_device_count = {}
+        best_device = float("inf")
+        devices_that_own_chosen_part_count = float("inf")
         for key, val in parts_of_device.items():
             if key in devices_that_own_chosen_part:
-                parts_of_device_count[key] = len(val)
-        devices_that_own_chosen_part_sorted_by_count_of_parts = sorted(
-            list(devices_that_own_chosen_part),
-            key=lambda d: (parts_of_device_count[d], devices.index(d))
-        )
+                count = len(val)
+                if count < devices_that_own_chosen_part_count:
+                    devices_that_own_chosen_part_count = count
+                    best_device = key
+                elif count == devices_that_own_chosen_part_count:
+                    if d < best_device:
+                        devices_that_own_chosen_part_count = count
+                        best_device = key
+
+        # devices_that_own_chosen_part_min = -1
+        # devices_that_own_chosen_part_count = -1
+        # for key, count in parts_of_device_count.items():
+        #     if count > devices_that_own_chosen_part_count:
+        #         devices_that_own_chosen_part_count = count
+        #         devices_that_own_chosen_part_min = key
+        #     pass
+        # devices_that_own_chosen_part_sorted_by_count_of_parts = sorted(
+        #     list(devices_that_own_chosen_part),
+        #     key=lambda d: (parts_of_device_count[d], devices.index(d))
+        # )
 
         # Если и таких устройств оказалось несколько — выбирается устройство с минимальным номером.
-        best_device = devices_that_own_chosen_part_sorted_by_count_of_parts[0]
+        # best_device = devices_that_own_chosen_part_sorted_by_count_of_parts[0]
         requests_dict[best_device].append(d)
 
     # После того, как все запросы отправлены, каждое устройство выбирает, чей запрос удовлетворить.
