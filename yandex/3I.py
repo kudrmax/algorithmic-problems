@@ -176,10 +176,13 @@ while len(commands) > 0:
         if team_or_player_name in teams:
             is_team = True
 
+        open_score = 0
         if is_team:
             open_score = teams[team_or_player_name]['count_first_scores']
         else:
-            open_score = players[team_or_player_name]['count_first_scores'] if team_or_player_name in players else 0
+            if team_or_player_name in players:
+                if 'count_first_scores' in players[team_or_player_name]:
+                    open_score = players[team_or_player_name]['count_first_scores']
         # print(f"Score opens by {team_or_player_name} ---> {open_score}")
         print(open_score)
 
