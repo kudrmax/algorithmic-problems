@@ -20,13 +20,16 @@ for command in lines:
     commands.append(command.strip())
 commands.reverse()
 
-players = collections.defaultdict(list)
+players = collections.defaultdict(dict)
 teams = collections.defaultdict(lambda: collections.defaultdict(int))
 
 
-def add_data_to_players(name: str, time, match_id):
+def add_data_to_players(name: str, time, match_id, team_name):
     score = {'match_id': match_id, 'time': time}
-    players[name].append(score)
+    if 'scores' not in players[name]:
+        players[name]['scores'] = []
+    players[name]['scores'].append(score)
+    players[name]['team_name'] = team_name
 
 
 # teams['HSE']['score_sum'] += 1
@@ -52,18 +55,19 @@ while len(commands) > 0:
         print(f"Done: {team1_name} - {team2_name} {score1}:{score2}")
 
         time1, time2 = 0, 0
-        for i in range(score1 + score2):
-            command = commands.pop()
-            match = goal_pattern.match(command)
-            if match:
-                player_name = match.group(1)
-                time = int(match.group(2))
-                add_data_to_players(name=player_name, time=time, match_id=match_id)
-                print(f"Done: {player_name} {time}")
-                if i == 0:
-                    time1 = time
-                if i == i + score1:
-                    time2 = time
+        for score, team_name in zip([score1, score2], [team1_name, team2_name]):
+            for i in range(score):
+                command = commands.pop()
+                match = goal_pattern.match(command)
+                if match:
+                    player_name = match.group(1)
+                    time = int(match.group(2))
+                    add_data_to_players(name=player_name, time=time, match_id=match_id, team_name=team_name)
+                    print(f"Done: {player_name} {time}")
+                    if i == 0 and team_name == team1_name:
+                        time1 = time
+                    if i == 0 and team_name == team2_name:
+                        time2 = time
 
         teams[team1_name]['score_sum'] += score1
         teams[team1_name]['count_of_matches'] += 1
@@ -90,18 +94,21 @@ while len(commands) > 0:
     match = total_goals_by_pattern.match(command)
     if match:
         player_name = match.group(1)
-        scores = players[player_name]
+        scores = players[player_name]['scores'] if 'scores' in players[player_name] else []
         score_count = len(scores)
         print(f"Done: Total goals by {player_name} ---> {score_count}")
 
     match = mean_goals_per_game_by_pattern.match(command)
     if match:
         player_name = match.group(1)
-        scores = players[player_name]
-        s = set()
-        for score in scores:
-            s.add(score['match_id'])
-        match_count = len(s)
+        scores = players[player_name]['scores']
+        team_name = players[player_name]['team_name']
+        match_count = teams[team_name]['count_of_matches']
+        # s = set()
+        # for score in scores:
+        #     s.add(score['match_id'])
+        # match_count = len(s)
+
         score_count = len(scores)
         mean_goals = score_count / match_count if match_count != 0 else 0
         print(f"Done: Mean goals per game by {player_name} ---> {mean_goals}")
