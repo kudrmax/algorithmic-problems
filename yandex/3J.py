@@ -1,3 +1,6 @@
+from time import sleep
+from tqdm import tqdm
+
 from collections import defaultdict
 
 with open('input.txt', 'r') as file:
@@ -73,7 +76,7 @@ def get_most_valuable_device(A, Bs):
 ##################################
 # print(f'{parts_of_device = }')
 
-for _ in range(100000):
+for _ in tqdm(range(100000)):
 
     # Перед каждым таймслотом для каждой части обновления определяется, на скольких устройствах сети скачана эта часть
     count_of_parts_dict = get_count_of_parts_dict()
@@ -144,15 +147,20 @@ for _ in range(100000):
         device_for_sending_part = best_device
 
         # Если и таких запросов несколько, то среди них выбирается устройство с наименьшим номером.
-        devices_for_sending_part[d] = device_for_sending_part
-
-    # Устройства, чьи запросы удовлетворены, скачивают запрошенную часть обновления, а остальные не скачивают ничего.
-    for d, device_for_sending_part in devices_for_sending_part.items():
+        # devices_for_sending_part[d] = device_for_sending_part
         chosen_part = chosen_parts_dict[device_for_sending_part]
         parts_of_device[device_for_sending_part].add(chosen_part)
         B = d
         A = device_for_sending_part
         count_parts_received[A][B] += 1
+
+    # Устройства, чьи запросы удовлетворены, скачивают запрошенную часть обновления, а остальные не скачивают ничего.
+    # for d, device_for_sending_part in devices_for_sending_part.items():
+    #     chosen_part = chosen_parts_dict[device_for_sending_part]
+    #     parts_of_device[device_for_sending_part].add(chosen_part)
+    #     B = d
+    #     A = device_for_sending_part
+    #     count_parts_received[A][B] += 1
 
     # print(f'{parts_of_device = }')
 
