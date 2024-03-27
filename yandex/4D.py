@@ -1,6 +1,6 @@
 with open('input.txt', 'r') as file:
     lines = file.readlines()
-w, count_l, count_r = list(map(int, lines[0].split()))
+w, _, _ = list(map(int, lines[0].split()))
 arr_l = list(map(int, lines[1].split()))
 arr_r = list(map(int, lines[2].split()))
 
@@ -71,3 +71,6 @@ print(f'w={w1}, h={h1}')
 print(f'w={w2}, h={h2}')
 
 print(min(h1, h2))
+
+print(f'{max(arr_l) = }')
+print(f'{max(arr_r) = }')
