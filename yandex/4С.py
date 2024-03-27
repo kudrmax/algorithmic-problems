@@ -25,7 +25,8 @@ def bs(arr, prefix_sums, l, s):
             left = mid + 1
         else:
             right = mid
-    if prefix_sums[left] == s:
+    delta = prefix_sums[left] - prefix_sums[left - l] if left - l >= 0 else prefix_sums[left]
+    if delta == s:
         return left
     return -1
 
@@ -33,10 +34,28 @@ def bs(arr, prefix_sums, l, s):
 # print(pairs)
 # print(prefix_sums)
 
+# with open('output.txt', 'r') as file:
+#     lines = file.readlines()
+# true_arr = []
+# for line in lines:
+#     true_arr.append(list(map(int, line.split()))[0])
+# print(true_arr)
+
+# for (l, s), true_ans in zip(pairs, true_arr):
+#     t = bs(arr, prefix_sums, l, s)
+#     if t != -1:
+#         ans = t - l + 1 + 1
+#     else:
+#         ans = -1
+#     if ans != true_ans:
+#         print(ans, true_ans, (l, s))
+
 for l, s in pairs:
     t = bs(arr, prefix_sums, l, s)
-    if t == -1:
-        print(-1)
-    # print(t, t - l + 1)
+    if t != -1:
+        ans = t - l + 1 + 1
     else:
-        print(t - l + 1 + 1)
+        ans = -1
+    # print(ans, (l, s))
+    print(ans)
+
