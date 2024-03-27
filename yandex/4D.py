@@ -23,6 +23,8 @@ def calc_h(w, arr):
 def calc_h_max(w_i):
     h1 = calc_h(w_i, arr_l)
     h2 = calc_h(w - w_i, arr_r)
+    if h1 == -1 or h2 == -1:
+        return float('inf')
     h = max(h1, h2)
     return h
 
@@ -38,10 +40,10 @@ def bs_l(l, r):
             return m
         elif h2 == -1:
             r = m
-        elif h1 < h2:
-            r = m
         elif h1 == -1:
             l = m + 1
+        elif h1 < h2:
+            r = m
         else: # h1 > h2
             l = m + 1
     return l
@@ -57,10 +59,10 @@ def bs_r(l, r):
             return m
         elif h2 == -1:
             r = m - 1
-        elif h1 < h2:
-            r = m - 1
         elif h1 == -1:
             l = m
+        elif h1 < h2:
+            r = m - 1
         else: # h1 > h2
             l = m
     return l
@@ -74,7 +76,10 @@ def print_all_w():
     for w_i in range(w):
         h1 = calc_h(w_i, arr_l)
         h2 = calc_h(w - w_i, arr_r)
-        print(f'{w_i}: {max(h1, h2)}', end='\t')
+        h = max(h1, h2) if h1 != -1 and h2 != -1 else -1
+        s = f'{w_i}: {h}' if h != -1 else ''
+        print(s, end='\t')
+        # print(f'{w_i}: {h}', end='\t')
     print()
 
 
