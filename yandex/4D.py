@@ -14,6 +14,8 @@ def calc_h(w, arr):
         if x + word > w:
             x = 0
             y += 1
+        if word > w:
+            return -1
         x += word
     return y + 1
 
@@ -30,22 +32,37 @@ def bs_l(l, r):
         m = (l + r) // 2
         h1 = calc_h(m, arr_l)
         h2 = calc_h(w - m, arr_r)
-        if h1 <= h2:
+        if h1 == -1 and h2 == -1:
+            pass
+        if h1 == h2:
+            return m
+        elif h2 == -1:
             r = m
-        else:
+        elif h1 < h2:
+            r = m
+        elif h1 == -1:
+            l = m + 1
+        else: # h1 > h2
             l = m + 1
     return l
-
 
 def bs_r(l, r):
     while l < r:
         m = (l + r + 1) // 2
         h1 = calc_h(m, arr_l)
         h2 = calc_h(w - m, arr_r)
-        if h1 <= h2:
-            l = m
-        else:
+        if h1 == -1 and h2 == -1:
+            pass
+        if h1 == h2:
+            return m
+        elif h2 == -1:
             r = m - 1
+        elif h1 < h2:
+            r = m - 1
+        elif h1 == -1:
+            l = m
+        else: # h1 > h2
+            l = m
     return l
 
 def print_all_w():
@@ -61,16 +78,16 @@ def print_all_w():
     print()
 
 
-w1 = bs_l(0, w)
-w2 = bs_r(0, w)
+w1 = bs_l(1, w)
+w2 = bs_r(1, w)
 h1 = calc_h_max(w1)
 h2 = calc_h_max(w2)
 
-print_all_w()
-print(f'w={w1}, h={h1}')
-print(f'w={w2}, h={h2}')
+# print_all_w()
+# print(f'w={w1}, h={h1}')
+# print(f'w={w2}, h={h2}')
 
 print(min(h1, h2))
 
-print(f'{max(arr_l) = }')
-print(f'{max(arr_r) = }')
+# print(f'{max(arr_l) = }')
+# print(f'{max(arr_r) = }')
