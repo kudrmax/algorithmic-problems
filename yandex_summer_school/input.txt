@@ -1,2 +1,2 @@
-abcd
-a<left>N
+programming
+programming<left><left><right><delete>
