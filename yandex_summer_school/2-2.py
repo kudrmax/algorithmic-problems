@@ -8,21 +8,21 @@ prices = list(map(int, lines[1].strip().split()))
 # res = [0 for _ in range(n)]
 res = []
 
-dp = [0 for _ in range(n + 1)]
+dp = [0 for _ in range(n)]
 dp[-1] = prices[-1]
-
-for i in range(n - 1, 0, -1):
+dp.append(0)
+for i in range(n - 2, -1, -1):
     min_price = float('inf')
     min_j = -1
-    for j in range(i + 1, min(i + k, n) + 1):
-        if prices[i - 1] * (j - i) + dp[j] <= min_price:
-        # if dp[j] <= min_price:
-            min_price = prices[i] * (j - i) + dp[j]
+    for j in range(i + 1, min(i + k + 1, n)):
+        var = prices[i] * (j - i) + dp[j]
+        if var <= min_price:
+            min_price = prices[i] * (j - i) + dp[j + 1]
             min_j = j
     dp[i] = min_price
     res.append(min_j)
 # res.append(1)
 
 print(dp)
-print(dp[1])
+print(dp[0])
 print(list(reversed(res)))
