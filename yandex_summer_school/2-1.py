@@ -14,7 +14,9 @@ def foo():
     hd_negative = {}
 
     step_counter = 0
+
     for x, y in arr:
+        ##### hy
         if y not in hy:
             hy[y] = {}
         hy[y][x] = 1
@@ -29,6 +31,24 @@ def foo():
             j += 1
         for k in range(x - j + 1, x + i):
             hy[y][k] = max_counter + 1
+        if max_counter + 1 == 5:
+            return step_counter
+
+        ##### hx
+        if x not in hx:
+            hx[x] = {}
+        hx[x][y] = 1
+        max_counter = 0
+        i = 1
+        while y + i in hx[x]:
+            max_counter += 1
+            i += 1
+        j = 1
+        while y - j in hx[x]:
+            max_counter += 1
+            j += 1
+        for k in range(y - j + 1, y + i):
+            hx[x][k] = max_counter + 1
         if max_counter + 1 == 5:
             return step_counter
 
