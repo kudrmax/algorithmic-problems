@@ -20,9 +20,18 @@ for i in range(n - 2, -1, -1):
             min_price = var
             min_j = j
     dp[i] = min_price
+    for m in range(min_j - i):
+        res.append(0)
     res.append(min_j)
-res.append(1)
+res.append(0)
 
-print(dp)
-print(dp[0])
-print(list(reversed(res)), sep=' ')
+res = list(reversed(res))
+
+# print(dp)
+print(res)
+# print(dp[0])
+for a, b in zip(res[:-1], res[1:]):
+    print(b - a, end=' ')
+
+
+# print(*list(), sep=' ')
