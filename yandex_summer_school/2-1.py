@@ -83,6 +83,30 @@ def foo():
             else:
                 second_win = True
 
+        ##### d_positive
+        d_positive_index = get_d_positive_index(x, y)
+        if d_positive_index not in hd_positive:
+            hd_positive[d_positive_index] = {}
+        hd_positive[d_positive_index][x] = 1
+        max_counter = 0
+        i = 1
+        while x + i in hd_positive[d_positive_index]:
+            max_counter += 1
+            i += 1
+        j = 1
+        while x - j in hd_positive[d_positive_index]:
+            max_counter += 1
+            j += 1
+        for k in range(x - j + 1, x + i):
+            hd_positive[d_positive_index][k] = max_counter + 1
+        if max_counter + 1 >= 5:
+            win_counter += 1
+            if step_counter % 2 != 0:
+                first_win = True
+            else:
+                second_win = True
+
+
     if win_counter == 0:
         return 'Draw'
     if win_counter == 1:
