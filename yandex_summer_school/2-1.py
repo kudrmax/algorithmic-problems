@@ -25,19 +25,37 @@ def get_d_negative_next_step(x, y, step):
 
 
 def foo():
-    hy = {}
-    hx = {}
-    hd_positive = {}
-    hd_negative = {}
+    hy_1 = {}
+    hy_2 = {}
+    hx_1 = {}
+    hx_2 = {}
+    hd_positive_1 = {}
+    hd_positive_2 = {}
+    hd_negative_1 = {}
+    hd_negative_2 = {}
 
     step_counter = 0
 
-    win_counter = 0
+    # win_counter = 0
+    win_counter_1 = 0
+    win_counter_2 = 0
     first_win = False
     second_win = False
 
     for x, y in arr:
         step_counter += 1
+
+        is_first = step_counter % 2 == 1
+        if is_first:
+            hy = hy_1
+            hx = hx_1
+            hd_positive = hd_positive_1
+            hd_negative = hd_negative_1
+        else:
+            hy = hy_2
+            hx = hx_2
+            hd_positive = hd_positive_2
+            hd_negative = hd_negative_2
 
         ##### hy
         if y not in hy:
@@ -55,11 +73,10 @@ def foo():
         for k in range(x - j + 1, x + i):
             hy[y][k] = max_counter + 1
         if max_counter + 1 >= 5:
-            win_counter += 1
-            if step_counter % 2 != 0:
-                first_win = True
+            if is_first:
+                win_counter_1 += 1
             else:
-                second_win = True
+                win_counter_2 += 1
 
         ##### hx
         if x not in hx:
@@ -77,11 +94,10 @@ def foo():
         for k in range(y - j + 1, y + i):
             hx[x][k] = max_counter + 1
         if max_counter + 1 >= 5:
-            win_counter += 1
-            if step_counter % 2 != 0:
-                first_win = True
+            if is_first:
+                win_counter_1 += 1
             else:
-                second_win = True
+                win_counter_2 += 1
 
         ##### d_positive
         d_positive_index = get_d_positive_index(x, y)
@@ -100,11 +116,10 @@ def foo():
         for k in range(x - j + 1, x + i):
             hd_positive[d_positive_index][k] = max_counter + 1
         if max_counter + 1 >= 5:
-            win_counter += 1
-            if step_counter % 2 != 0:
-                first_win = True
+            if is_first:
+                win_counter_1 += 1
             else:
-                second_win = True
+                win_counter_2 += 1
 
         ##### d_negative
         d_negative_index = get_d_negative_index(x, y)
@@ -123,20 +138,17 @@ def foo():
         for k in range(y - j + 1, y + i):
             hd_negative[d_negative_index][k] = max_counter + 1
         if max_counter + 1 >= 5:
-            win_counter += 1
-            if step_counter % 2 != 0:
-                first_win = True
+            if is_first:
+                win_counter_1 += 1
             else:
-                second_win = True
+                win_counter_2 += 1
 
-
-    if win_counter == 0:
+    if win_counter_1 == 0 and win_counter_2 == 0:
         return 'Draw'
-    if win_counter == 1:
-        if first_win:
-            return 'First'
-        if second_win:
-            return 'Second'
+    if win_counter_1 == 1 and win_counter_2 == 0:
+        return 'First'
+    if win_counter_2 == 1 and win_counter_1 == 0:
+        return 'Second'
     return 'Inattention'
 
 
