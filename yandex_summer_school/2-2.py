@@ -14,15 +14,15 @@ dp.append(0)
 for i in range(n - 2, -1, -1):
     min_price = float('inf')
     min_j = -1
-    for j in range(i + 1, min(i + k + 1, n)):
+    for j in range(i + 1, min(i + k + 1, n + 1)):
         var = prices[i] * (j - i) + dp[j]
         if var <= min_price:
-            min_price = prices[i] * (j - i) + dp[j + 1]
+            min_price = var
             min_j = j
     dp[i] = min_price
     res.append(min_j)
-# res.append(1)
+res.append(1)
 
 print(dp)
 print(dp[0])
-print(list(reversed(res)))
+print(list(reversed(res)), sep=' ')
