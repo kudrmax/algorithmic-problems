@@ -5,8 +5,6 @@ n, k = tuple(map(int, lines[0].strip().split()))
 
 prices = list(map(int, lines[1].strip().split()))
 
-# res = [0 for _ in range(n)]
-# res = [0 for _ in range(n)]
 res = []
 
 flag = False
@@ -21,15 +19,10 @@ for i in range(n - 2, -1, -1):
         if var <= min_price:
             min_price = var
             min_j = j
-            if j == n:
-                flag = True
     dp[i] = min_price
-    # for m in range(min_j - i):
-    #     res.append(0)
     res.append(min_j)
 res.append(0)
 
-#res = list(reversed(res))
 flag = False
 if res[0] != n:
     flag = True
@@ -43,8 +36,5 @@ print(dp[0])
 for a, b in zip(res[:-1], res[1:]):
     print(b - a, end=' ')
     print('0' * (b - a - 1), end='')
-    if '0' * (b - a - 1) != '':
+    if b - a - 1 != 0:
         print(' ', end='')
-
-
-# print(*list(), sep=' ')
