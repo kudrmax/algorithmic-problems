@@ -7,6 +7,23 @@ for line in lines[1:]:
 n = len(arr)
 
 
+def get_d_positive_index(x, y):
+    return y - x
+
+
+def get_d_negative_index(x, y):
+    x = -x
+    return y - x
+
+
+def get_d_positive_next_step(x, y, step):
+    return x + step, y + step
+
+
+def get_d_negative_next_step(x, y, step):
+    return x + step, y - step
+
+
 def foo():
     hy = {}
     hx = {}
