@@ -5,21 +5,22 @@ def foo():
         lines = file.readlines()
 
     true_string = lines[0].strip()
+    # print(true_string)
     log = lines[1].strip()
 
     typed_string = []
 
-    # def print_typed_string(cursor):
-    #     s = []
-    #     for i in range(len(typed_string)):
-    #         letter = typed_string[i]
-    #         if i == cursor:
-    #             letter = letter.upper()
-    #         s.append(letter)
-    #     s = ''.join(s)
-    #     if s == '':
-    #         return 'empty'
-    #     return s
+    def print_typed_string(cursor):
+        s = []
+        for i in range(len(typed_string)):
+            letter = typed_string[i]
+            if i == cursor:
+                letter = letter.upper()
+            s.append(letter)
+        s = ''.join(s)
+        if s == '':
+            return 'empty'
+        return s
 
     # def cursor_is_correct(p):
     #     if p > len(typed_string):
@@ -33,7 +34,7 @@ def foo():
             if p < len(typed_string):
                 typed_string.pop(p)
         elif command == 'bspace':
-            if p - 1 > 0:
+            if p - 1 >= 0:
                 typed_string.pop(p - 1)
                 p -= 1
         elif command == 'left':
