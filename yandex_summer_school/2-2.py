@@ -29,13 +29,17 @@ for i in range(n - 2, -1, -1):
     res.append(min_j)
 res.append(0)
 
-res = list(reversed(res))
-if not flag:
+#res = list(reversed(res))
+flag = False
+if res[0] != n:
+    flag = True
+res.reverse()
+if flag:
     res.append(n)
 
 print(dp[0])
-print(dp)
-print(res)
+# print(dp)
+# print(res)
 for a, b in zip(res[:-1], res[1:]):
     print(b - a, end=' ')
     print('0' * (b - a - 1), end='')
