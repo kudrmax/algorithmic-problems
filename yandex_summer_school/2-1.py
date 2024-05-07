@@ -33,6 +33,7 @@ def foo():
     win_counter_2 = 0
     first_win = False
     second_win = False
+    flag = False
 
     for x, y in arr:
         step_counter += 1
@@ -67,8 +68,12 @@ def foo():
         if max_counter + 1 >= 5:
             if is_first:
                 win_counter_1 += 1
+                if step_counter != n:
+                    flag = True
             else:
                 win_counter_2 += 1
+                if step_counter != n:
+                    flag = True
 
         ##### hx
         if x not in hx:
@@ -88,8 +93,12 @@ def foo():
         if max_counter + 1 >= 5:
             if is_first:
                 win_counter_1 += 1
+                if step_counter != n:
+                    flag = True
             else:
                 win_counter_2 += 1
+                if step_counter != n:
+                    flag = True
 
         ##### d_positive
         d_positive_index = get_d_positive_index(x, y)
@@ -110,8 +119,12 @@ def foo():
         if max_counter + 1 >= 5:
             if is_first:
                 win_counter_1 += 1
+                if step_counter != n:
+                    flag = True
             else:
                 win_counter_2 += 1
+                if step_counter != n:
+                    flag = True
 
         ##### d_negative
         d_negative_index = get_d_negative_index(x, y)
@@ -132,15 +145,20 @@ def foo():
         if max_counter + 1 >= 5:
             if is_first:
                 win_counter_1 += 1
+                if step_counter != n:
+                    flag = True
             else:
                 win_counter_2 += 1
+                if step_counter != n:
+                    flag = True
 
     if win_counter_1 == 0 and win_counter_2 == 0:
         return 'Draw'
-    if win_counter_1 == 1 and win_counter_2 == 0:
-        return 'First'
-    if win_counter_2 == 1 and win_counter_1 == 0:
-        return 'Second'
+    if not flag:
+        if win_counter_1 == 1 and win_counter_2 == 0:
+            return 'First'
+        if win_counter_2 == 1 and win_counter_1 == 0:
+            return 'Second'
     return 'Inattention'
 
 

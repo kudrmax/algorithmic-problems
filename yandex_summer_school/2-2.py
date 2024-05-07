@@ -23,18 +23,33 @@ for i in range(n - 2, -1, -1):
     res.append(min_j)
 res.append(0)
 
-flag = False
-if res[0] != n:
-    flag = True
-res.reverse()
-if flag:
-    res.append(n)
+# print(res)
 
 print(dp[0])
+if res[0] != n:
+    print(n - res[0], end=' ')
+for i in range(n - 1, 0, -1):
+    a = res[i]
+    b = res[i - 1]
+    print(b - a, end=' ')
+    print('0' * (b - a - 1), end='', sep=' ')
+    # if b - a - 1 == 0:
+    #     print(' ', end='')
+
 # print(dp)
 # print(res)
-for a, b in zip(res[:-1], res[1:]):
-    print(b - a, end=' ')
-    print('0' * (b - a - 1), end='')
-    if b - a - 1 != 0:
-        print(' ', end='')
+
+# flag = False
+# if res[0] != n:
+#     flag = True
+# res.reverse()
+# if flag:
+#     res.append(n)
+#
+# # print(res)
+# for a, b in zip(res[:-1], res[1:]):
+#     print(b - a, end=' ')
+#     print('0' * (b - a - 1), end='')
+#     if b - a - 1 != 0:
+#         print(' ', end='')
+
