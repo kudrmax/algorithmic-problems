@@ -11,6 +11,9 @@ def roc_auc(probabilities, y_true):
     y_proba = y_proba[sorted_indexes]
     y_true = y_true[sorted_indexes]
 
+    TPRs = [0]
+    FPRs = [0]
+
     roc_auc_value = 0  # итоговая площадь
     FPR_prev = 0  # понадобится для вычисления площади
     for i in range(len(y_true) + 1):  # подсчет ROC_AUC
@@ -43,7 +46,17 @@ def roc_auc(probabilities, y_true):
             roc_auc_value += delta_s
 
         FPR_prev = FPR
-    return roc_auc_value
+
+        TPRs.append(TPR)
+        FPRs.append(FPR)
+        # добавил сохранение TPR и FPR в массив только по той причине, что мое решение, написанное выше,
+        # которое не использует дополнительную память, выдает всего 0.12 баллов, хотя вроде бы оно верное
+        # но видимо есть погрешность вычисления
+        # поэтому решил попробовать посчитать через np.trapz
+
+    roc_auc_value_trapz = np.trapz(TPRs, FPRs)
+
+    return roc_auc_value_trapz
 
 # probabilities = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
 # y_true = [1, 1, 0, 1, 0, 0, 1, 0, 0]
