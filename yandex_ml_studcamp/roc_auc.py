@@ -19,8 +19,10 @@ def roc_auc(probabilities, y_true):
     TPR_prev = 0
     FPR_prev = 0
 
+    S = 0
+
     # подсчет ROC_AUC
-    for i in range(len(y_true)):
+    for i in range(len(y_true) + 1):
         # i - порог
         # для любого j < i будем считать, что y_proba[j] — положительный класс
 
@@ -43,27 +45,43 @@ def roc_auc(probabilities, y_true):
         FPR = FP / (FP + TN)
         print(f'{TPR = }, {FPR = }')
 
+        if FPR != 0:
+            x = FPR - FPR_prev
+            y = TPR
+            s = x * y
+            S += s
+
         TPRs.append(TPR)
         FPRs.append(FPR)
 
-    TPRs.append(1.0)
-    FPRs.append(1.0)
+        TPR_prev = TPR
+        FPR_prev = FPR
+
+    # TPRs.append(1.0)
+    # FPRs.append(1.0)
 
     import matplotlib.pyplot as plt
 
-    plt.scatter(TPRs, FPRs)
+    plt.scatter(y=TPRs, x=FPRs)
     plt.show()
+
+    return S
 
 
 # Пример использования
 probabilities = [0.1, 0.4, 0.35, 0.8]
 y_true = [0, 0, 1, 1]
 
-probabilities = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
-y_true = [1, 1, 0, 1, 0, 0, 1, 0, 0]
+# probabilities = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+# y_true = [1, 1, 0, 1, 0, 0, 1, 0, 0]
 
-print(roc_auc(probabilities, y_true))  # Должно вывести 0.75
+# probabilities = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+# y_true = [1, 1, 1, 1, 0, 0, 0, 0, 0]
 
-# from sklearn.metrics import roc_auc_score
+S = roc_auc(probabilities, y_true)
 
-# print(roc_auc_score(probabilities, y_true))
+print(S)  # Должно вывести 0.75
+
+from sklearn.metrics import roc_auc_score
+
+print(roc_auc_score(y_score=probabilities, y_true=y_true))
