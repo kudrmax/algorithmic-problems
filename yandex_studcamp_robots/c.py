@@ -3,7 +3,6 @@ from typing import List
 with open('input.txt') as f:
     lines = f.readlines()
 
-# t = int(lines[0])
 data = []
 for i in range(1, len(lines[1:]), 2):
     _, k = map(int, lines[i].strip().split())
@@ -13,18 +12,14 @@ for i in range(1, len(lines[1:]), 2):
 
 
 def get_mean(arr: List[int]) -> float:
-    return sum(arr) / len(arr)
+    return round(sum(arr) / len(arr))
 
 
-def get_sigma(arr: List[int], a_fix: int, d: int = 2):
-    return sum([abs(a - a_fix) ** d for a in arr]) / len(arr)
-
-
-def get_delta(a_arr: List[int], b_arr: List[int], d: int = 2):
+def get_delta_between_arrs(a_arr: List[int], b_arr: List[int], d: int = 2):
     return sum([abs(a - b) ** d for a, b in zip(a_arr, b_arr)])
 
 
-def get_diff_with_mean(arr: List[int], mean: float = None) -> List[float]:
+def get_diff_with_mean_arr(arr: List[int], mean: float = None) -> List[float]:
     if not mean:
         mean = get_mean(arr)
     return [abs(a - mean) for a in arr]
@@ -34,7 +29,7 @@ for n, k, a_arr in data:
     a_arr = sorted(a_arr)
     b_arr = [float('inf') for _ in range(len(a_arr))]
     mean = get_mean(a_arr)
-    diff_arr = get_diff_with_mean(a_arr, mean=mean)
+    diff_arr = get_diff_with_mean_arr(a_arr, mean=mean)
 
     print(f'{n = },\t {k = },\t {mean = }')
     print(f'{a_arr = }')
@@ -62,23 +57,4 @@ for n, k, a_arr in data:
             b_arr[i] = mean
 
     print(f'{b_arr = }')
-
-
-def print_diff():
-    print('PRINT DIFF')
-    for n, k, a in data:
-        a = sorted(a)
-
-        b_list = [
-            [2, 2, 2, 14, 14, 14],
-            [6, 6, 6, 14, 14, 14],
-        ]
-
-        print(f'{n = },\t {k = },\t mean = {get_mean(a)}')
-        print(f'{a = }')
-        print(f'diff = {get_diff_with_mean(a, mean=5)}')
-        print()
-        for b in b_list:
-            print(f'{b = },\tdelta = {get_delta(a, b)}')
-
-# print_diff()
+    print(f'delta_between_arrs = {get_delta_between_arrs(a_arr, b_arr)}')
