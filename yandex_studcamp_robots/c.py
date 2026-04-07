@@ -29,50 +29,40 @@ def get_arr_with_sorted_indiices(arr: List[int]) -> List[int]:
     return arr_indices
 
 
-def foo(n, k, a_arr):
-    result = []
-    for n, k, a_arr in data:
-        a_indices = get_arr_with_sorted_indiices(a_arr)
-        a_arr = sorted(a_arr)
-        b_arr = [float('inf') for _ in range(len(a_arr))]
-        mean = get_mean(a_arr)
-        diff_arr = get_diff_with_mean_arr(a_arr, mean=mean)
+def get_b(n, k, a_arr):
+    a_indices = get_arr_with_sorted_indiices(a_arr)
+    a_arr = sorted(a_arr)
+    b_arr = [float('inf') for _ in range(len(a_arr))]
+    mean = get_mean(a_arr)
+    diff_arr = get_diff_with_mean_arr(a_arr, mean=mean)
 
-        print(f'{n = },\t {k = },\t {mean = }')
-        print(f'{a_arr = }')
-        print(f'{diff_arr = }')
+    # print(f'{diff_arr = }')
+    # print(f'{mean = }')
 
-        for _ in range(k - 1):
-            max_diff = -float('inf')
-            max_diff_index = -1
-            for i, diff in enumerate(diff_arr):
-                if diff > max_diff:
-                    max_diff = diff
-                    max_diff_index = i
-            print(f'{max_diff = }, {max_diff_index = }')
-            # for i, diff in enumerate(diff_arr):
-            #     pass
-            for i, a in enumerate(a_arr):
-                if abs(a - max_diff) < abs(a - mean):
-                    # print(f'{i = }, {a = }, {abs(a - max_diff) = }, {abs(a - mean) = }')
-                    b_arr[i] = a_arr[max_diff_index]
-            # print(b_arr)
-            diff_arr[max_diff_index] = -float('inf')
+    for _ in range(k - 1):
+        max_diff = -float('inf')
+        max_diff_index = -1
+        for i, diff in enumerate(diff_arr):
+            if diff > max_diff:
+                max_diff = diff
+                max_diff_index = i
+        for i, a in enumerate(a_arr):
+            if abs(a - max_diff) < abs(a - mean):
+                b_arr[i] = a_arr[max_diff_index]
+        diff_arr[max_diff_index] = -float('inf')
 
-        for i, b in enumerate(b_arr):
-            if b == float('inf'):
-                b_arr[i] = mean
-        b_not_sorted = [-1 for _ in range(len(b_arr))]
-        for i, right_index in enumerate(a_indices):
-            b_not_sorted[right_index] = b_arr[i]
+    for i, b in enumerate(b_arr):
+        if b == float('inf'):
+            b_arr[i] = mean
+    b_not_sorted = [-1 for _ in range(len(b_arr))]
+    for i, right_index in enumerate(a_indices):
+        b_not_sorted[right_index] = b_arr[i]
 
-        print(f'{b_arr = }')
-        print(f'{b_not_sorted = }')
-        print(f'delta_between_arrs = {get_delta_between_arrs(a_arr, b_arr)}')
+    # print(f'{b_arr = }')
+    # print(f'{b_not_sorted = }')
+    # print(f'delta_between_arrs = {get_delta_between_arrs(a_arr, b_arr)}')
 
-        result.append(b_not_sorted)
-        print()
-    return result
+    return b_not_sorted
 
 
 def check(a_arr, b_arrs):
@@ -83,6 +73,7 @@ def check(a_arr, b_arrs):
 
 
 if __name__ == '__main__':
+    # считывание
     data = []
     for i in range(1, len(lines[1:]), 2):
         _, k = map(int, lines[i].strip().split())
@@ -90,11 +81,26 @@ if __name__ == '__main__':
         n = len(a_arr)
         data.append((n, k, a_arr))
 
-    bs = foo(n, k, a_arr)
-    # for b in bs:
-    #     print(b)
-    # check(a_arr, [
-    #     [2, 2, 1, 4, 4, 2, 1, 4, 4, 4],
-    #     [2, 2, 3, 5, 5, 2, 3, 5, 5, 5]
-    # ])
-    # print(get_diff_with_mean_arr(sorted([1, 2, 3, 4, 5, 2, 3, 4, 5, 6])))
+    for n, k, a_arr in data:
+        print(f'{n = },\t {k = }')
+        print(f'{a_arr = }')
+        b_arr = get_b(n, k, a_arr)
+        print(f'{b_arr = }')
+        print(f'delta = {get_delta_between_arrs(a_arr, b_arr)}')
+        print()
+
+    a_true = list(map(int, '1 2 3 4 5 2 3 4 5 6'.split()))
+    b_true = list(map(int, '2 2 3 5 5 2 3 5 5 5'.split()))
+    delta_true = get_delta_between_arrs(b_true, a_true)
+    print(f'{delta_true = }')
+
+    a_true = list(map(int, '1 2 2 3 3 4 4 5 5 6'.split()))
+    b_true = list(map(int, '2 2 2 3 3 5 5 5 5 5'.split()))
+    delta_true = get_delta_between_arrs(b_true, a_true)
+    print(f'{delta_true = }')
+
+    a_true = list(map(int, '1 2 2 3 3 4 4 5 5 6'.split()))
+    b_true = list(map(int, '2 2 2 4 4 4 4 5 5 5'.split()))
+    delta_true = get_delta_between_arrs(b_true, a_true)
+    print(f'{delta_true = }')
+
